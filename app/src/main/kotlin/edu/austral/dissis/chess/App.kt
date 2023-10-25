@@ -3,10 +3,10 @@
  */
 package edu.austral.dissis.chess
 
-import edu.austral.dissis.chess.gui.CachedImageResolver
-import edu.austral.dissis.chess.gui.DefaultImageResolver
-import edu.austral.dissis.chess.gui.GameView
-import edu.austral.dissis.chess.gui.SimpleGameEngine
+import edu.austral.dissis.chess.chess.ClassicGame
+import edu.austral.dissis.chess.chess.boarderReader.BoarderReader
+import edu.austral.dissis.chess.chess.createValidationEngine.ClassicEngine
+import edu.austral.dissis.chess.gui.*
 import javafx.application.Application
 import javafx.application.Application.launch
 import javafx.scene.Scene
@@ -18,7 +18,10 @@ fun main() {
 }
 
 class ChessGameApplication : Application() {
-    private val gameEngine = SimpleGameEngine()
+    private val boarderReader = BoarderReader()
+    private val checkmatePieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/checkmate.txt", ClassicEngine())
+    private val pieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/beginning", ClassicEngine())
+    private val adapter = ClassicGame(pieces, PlayerColor.BLACK, 8)
     private val imageResolver = CachedImageResolver(DefaultImageResolver())
 
     companion object {
@@ -28,7 +31,7 @@ class ChessGameApplication : Application() {
     override fun start(primaryStage: Stage) {
         primaryStage.title = GameTitle
 
-        val root = GameView(gameEngine, imageResolver)
+        val root = GameView(adapter, imageResolver)
         primaryStage.scene = Scene(root)
 
         primaryStage.show()
