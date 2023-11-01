@@ -21,7 +21,7 @@ class ValidateCastle : MovementValidator {
         for ((square, piece) in pieces.entries)
             if (checkPieceRookColorAndMoves(piece, pieces[from]!!))
                 availablePieces.add(square)
-        return availablePieces;
+        return availablePieces
     }
     private fun checkPieceRookColorAndMoves(piece: Piece, other: Piece): Boolean{
         return checkPieceRook(piece.chessPiece) && checkPieceColor(piece, other) && piece.moves == 0
