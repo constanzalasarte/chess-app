@@ -20,8 +20,8 @@ fun main() {
 class ChessGameApplication : Application() {
     private val boarderReader = BoarderReader()
     private val checkmatePieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/checkmate.txt", ClassicEngine())
-    private val pieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/beginning", ClassicEngine())
-    private val adapter = ClassicGame(pieces, PlayerColor.BLACK, 8)
+//    private val pieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/beginning", ClassicEngine())
+    private val adapter = ClassicGame(checkmatePieces, PlayerColor.BLACK, 8)
     private val imageResolver = CachedImageResolver(DefaultImageResolver())
 
     companion object {

@@ -1,7 +1,7 @@
 package edu.austral.dissis.chess.chess
 
 import edu.austral.dissis.chess.chess.validationEngine.ValidationEngine
-import edu.austral.dissis.chess.chess.validators.ValidatorResult
+import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
 
 class Piece(
 //    var active: Boolean,
@@ -17,5 +17,16 @@ class Piece(
 
     fun move(to: Square, from: Square, pieces: Map<Square, Piece>): ValidatorResult {
         return validationMapper.move(to, from, pieces)
+    }
+
+    fun getPieceId(): String {
+        return when (chessPiece){
+            ChessPiece.PAWN -> "pawn"
+            ChessPiece.HORSE -> "knight"
+            ChessPiece.BISHOP -> "bishop"
+            ChessPiece.ROOK -> "rook"
+            ChessPiece.QUEEN -> "queen"
+            ChessPiece.KING -> "king"
+        }
     }
 }

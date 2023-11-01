@@ -3,8 +3,9 @@ package edu.austral.dissis.chess.chess.validators.move
 
 import edu.austral.dissis.chess.chess.Piece
 import edu.austral.dissis.chess.chess.Square
-import edu.austral.dissis.chess.chess.validators.TypeResult
-import edu.austral.dissis.chess.chess.validators.ValidatorResult
+import edu.austral.dissis.chess.chess.validators.result.InvalidResult
+import edu.austral.dissis.chess.chess.validators.result.ValidResult
+import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
 import kotlin.math.abs
 
 class QuantityOfMoves(private val quantity: Int, private val type: MoveType) : MoveValidator() {
@@ -15,13 +16,13 @@ class QuantityOfMoves(private val quantity: Int, private val type: MoveType) : M
 
     private fun checkVertical(from: Square, to: Square): ValidatorResult {
         val vertical = quantitySquaresBtw(from.vertical, to.vertical)
-        if(abs(vertical) == quantity) return ValidatorResult(TypeResult.VALID)
-        return ValidatorResult(TypeResult.INVALID, "It can't move $quantity squares")
+        if(abs(vertical) == quantity) return ValidResult()
+        return InvalidResult()
     }
 
     private fun checkHorizontal(from: Square, to: Square): ValidatorResult {
         val horizontal = quantitySquaresBtw(from.horizontal, to.horizontal)
-        if(abs(horizontal) == quantity) return ValidatorResult(TypeResult.VALID)
-        return ValidatorResult(TypeResult.INVALID, "It can't move $quantity squares")
+        if(abs(horizontal) == quantity) return ValidResult()
+        return InvalidResult()
     }
 }

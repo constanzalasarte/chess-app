@@ -2,12 +2,14 @@ package edu.austral.dissis.chess.chess
 
 import edu.austral.dissis.chess.gui.*
 import edu.austral.dissis.chess.gui.ChessPiece
-import edu.austral.dissis.chess.chess.validators.TypeResult
-import edu.austral.dissis.chess.chess.validators.ValidatorResult
+import edu.austral.dissis.chess.chess.validators.result.InvalidResult
+import edu.austral.dissis.chess.chess.validators.result.ValidResult
+import edu.austral.dissis.chess.chess.validators.result.ValidWExecutionResult
+import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
 import edu.austral.dissis.chess.chess.victoryValidators.CheckmateValidator
 import edu.austral.dissis.chess.chess.victoryValidators.TypeVictoryResult
 
-class ClassicGame(val map: MutableMap<Square, Piece>, var currentColor: PlayerColor, val boardSize: Int) : GameEngine {
+class ClassicGame(val map: MutableMap<Square, Piece>, private var currentColor: PlayerColor, private val boardSize: Int) : GameEngine {
     private val victoryValidator = CheckmateValidator()
 
     override fun init(): InitialState {
@@ -20,18 +22,18 @@ class ClassicGame(val map: MutableMap<Square, Piece>, var currentColor: PlayerCo
 
         val piece = getPiece(fromSquare)
         if(fromSquare == toSquare) return InvalidMove("Invalid move")
-        if(piece == null) return InvalidMove("No piece in (" + move.from.row + ", " + move.from.column + ')')
+        if(piece == null) return InvalidMove("No piece in (" + fromSquare.horizontal + ", " + fromSquare.vertical + ')')
         else if (pieceToPlayerColor(piece.color) != currentColor)
             return InvalidMove("Piece does not belong to current player")
 
 
-        val result: ValidatorResult = piece.move(fromSquare, toSquare, map)
-        when (result.typeResult) {
-            TypeResult.INVALID -> return InvalidMove("Invalid move")
-            TypeResult.VALID -> movePiece(fromSquare, toSquare)
-            else -> {
-                movePiece(fromSquare, toSquare)
+        when (val result: ValidatorResult = piece.move(fromSquare, toSquare, map)) {
+            is InvalidResult -> return InvalidMove("Invalid move")
+            is ValidResult -> movePiece(fromSquare, toSquare)
+            is ValidWExecutionResult -> {
                 applyMove(Move(squareToPosition(result.fromSquare), squareToPosition(result.toSquare)))
+                movePiece(fromSquare, toSquare)
+                changeCurrentColor()
             }
         }
 
@@ -42,7 +44,7 @@ class ClassicGame(val map: MutableMap<Square, Piece>, var currentColor: PlayerCo
         val chessPieces = getChessPieces()
 
         val victoryResult = getVictoryResult()
-        if(victoryResult ==  TypeVictoryResult.CHECKMATE)
+        if(victoryResult == TypeVictoryResult.CHECKMATE)
             return (GameOver(currentColor))
         else if (victoryResult == TypeVictoryResult.NO_MORE_OPPONENT_PIECES){
             println("TIE!")
@@ -60,21 +62,13 @@ class ClassicGame(val map: MutableMap<Square, Piece>, var currentColor: PlayerCo
     private fun getChessPieces(): ArrayList<ChessPiece>{
         val pieces = ArrayList<ChessPiece>()
         for((square, piece) in map){
-            pieces.add(getChessPiece(piece.color, piece.id, square, piece.chessPiece))
+            pieces.add(getChessPiece(piece, square))
         }
         return pieces
     }
 
-    private fun getChessPiece(color: PieceColor, id: String, square: Square, piece: edu.austral.dissis.chess.chess.ChessPiece): ChessPiece{
-        val pieceId = when (piece){
-            edu.austral.dissis.chess.chess.ChessPiece.PAWN -> "pawn"
-            edu.austral.dissis.chess.chess.ChessPiece.HORSE -> "knight"
-            edu.austral.dissis.chess.chess.ChessPiece.BISHOP -> "bishop"
-            edu.austral.dissis.chess.chess.ChessPiece.ROOK -> "rook"
-            edu.austral.dissis.chess.chess.ChessPiece.QUEEN -> "queen"
-            edu.austral.dissis.chess.chess.ChessPiece.KING -> "king"
-        }
-        return ChessPiece(id, pieceToPlayerColor(color), squareToPosition(square), pieceId)
+    private fun getChessPiece(piece: Piece, square: Square): ChessPiece{
+        return ChessPiece(piece.id, pieceToPlayerColor(piece.color), squareToPosition(square), piece.getPieceId())
     }
     private fun pieceToPlayerColor(color: PieceColor) : PlayerColor{
         if(color==PieceColor.WHITE) return PlayerColor.WHITE
@@ -91,7 +85,7 @@ class ClassicGame(val map: MutableMap<Square, Piece>, var currentColor: PlayerCo
 
     private fun positionToSquare(position: Position): Square {
         val vertical = coordinateUIToSquare(position.component1() - 1)
-        val horizontal = coordinateUIToSquare(position.component2() - 1)
+        val horizontal = coordinateUIToSquare(position.component2()-1)
         return Square(vertical, horizontal)
     }
 
@@ -100,8 +94,7 @@ class ClassicGame(val map: MutableMap<Square, Piece>, var currentColor: PlayerCo
     }
 
     private fun movePiece(from: Square, to: Square){
-        map.put(to, map.remove(from)!!)
-
+        map[to] = map.remove(from)!!
     }
 
 

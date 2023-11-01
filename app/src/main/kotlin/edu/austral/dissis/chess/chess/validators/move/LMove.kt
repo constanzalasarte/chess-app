@@ -2,8 +2,9 @@ package edu.austral.dissis.chess.chess.validators.move
 
 import edu.austral.dissis.chess.chess.Piece
 import edu.austral.dissis.chess.chess.Square
-import edu.austral.dissis.chess.chess.validators.TypeResult
-import edu.austral.dissis.chess.chess.validators.ValidatorResult
+import edu.austral.dissis.chess.chess.validators.result.InvalidResult
+import edu.austral.dissis.chess.chess.validators.result.ValidResult
+import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
 import kotlin.math.abs
 
 class LMove: MoveValidator() {
@@ -13,7 +14,7 @@ class LMove: MoveValidator() {
         var result = false
         if(abs(vertical) == 2) result = (abs(horizontal) == 1)
         else if(abs(horizontal) == 2) result = abs(vertical) == 1
-        if(result) return ValidatorResult(TypeResult.VALID)
-        return ValidatorResult(TypeResult.INVALID, "The movement is not L-Move")
+        if(result) return ValidResult()
+        return InvalidResult()
     }
 }

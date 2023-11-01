@@ -1,8 +1,9 @@
 package edu.austral.dissis.chess.chess.validators.obstacle
 import edu.austral.dissis.chess.chess.Piece
 import edu.austral.dissis.chess.chess.Square
-import edu.austral.dissis.chess.chess.validators.TypeResult
-import edu.austral.dissis.chess.chess.validators.ValidatorResult
+import edu.austral.dissis.chess.chess.validators.result.InvalidResult
+import edu.austral.dissis.chess.chess.validators.result.ValidResult
+import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
 import kotlin.math.abs
 
 class ObsVerticalMove: ObstaclePiece() {
@@ -12,11 +13,11 @@ class ObsVerticalMove: ObstaclePiece() {
         while (abs(vertical) > 0) {
             square = Square(from.vertical + vertical, from.horizontal)
 
-            if(isObstacle(square, pieces)) return ValidatorResult(TypeResult.INVALID)
+            if(isObstacle(square, pieces)) return InvalidResult()
 
             if(vertical < 0) vertical++
             else vertical--
         }
-        return ValidatorResult(TypeResult.VALID)
+        return ValidResult()
     }
 }
