@@ -35,6 +35,7 @@ class ClassicGame(val map: MutableMap<Square, Piece>, private var currentColor: 
             is ValidWExecutionResult -> {
                 applyMove(Move(squareToPosition(result.fromSquare), squareToPosition(result.toSquare)))
                 movePiece(fromSquare, toSquare)
+                currentColor = getOpponentColor()
                 changeCurrentColor()
             }
         }
@@ -42,19 +43,25 @@ class ClassicGame(val map: MutableMap<Square, Piece>, private var currentColor: 
         return statusGame()
     }
 
+
+
     private fun statusGame(): MoveResult{
         val chessPieces = getChessPieces()
 
         val victoryResult = getVictoryResult()
-        if(victoryResult is CheckmateResult)
+        if(victoryResult.isOver())
             return (GameOver(currentColor))
-        else if (victoryResult is NoMoreOpponentPieces){
-            println("TIE!")
-            return (GameOver(currentColor))
+        else {
+            if(getLostResult().isOver())
+                return (GameOver(getOpponentColor()))
         }
-
         changeCurrentColor()
         return NewGameState(chessPieces, currentColor)
+    }
+
+    private fun getLostResult(): VictoryResult {
+        return victoryValidator.validateVictory(map, playerToPieceColor(getOpponentColor()))
+
     }
 
     private fun getVictoryResult(): VictoryResult {
@@ -68,7 +75,9 @@ class ClassicGame(val map: MutableMap<Square, Piece>, private var currentColor: 
         }
         return pieces
     }
-
+    private fun changeCurrentColor() {
+        currentColor = getOpponentColor()
+    }
     private fun getChessPiece(piece: Piece, square: Square): ChessPiece{
         return ChessPiece(piece.id, pieceToPlayerColor(piece.color), squareToPosition(square), piece.getPieceId())
     }
@@ -100,8 +109,8 @@ class ClassicGame(val map: MutableMap<Square, Piece>, private var currentColor: 
     }
 
 
-    private fun changeCurrentColor(){
-        currentColor = if(currentColor == PlayerColor.WHITE) PlayerColor.BLACK
+    private fun getOpponentColor(): PlayerColor{
+        return if(currentColor == PlayerColor.WHITE) PlayerColor.BLACK
         else PlayerColor.WHITE
     }
 

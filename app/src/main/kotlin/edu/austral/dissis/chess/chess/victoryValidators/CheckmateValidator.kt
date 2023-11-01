@@ -15,22 +15,34 @@ data class InitialState(val squares: List<Square>, val opponentSquares: List<Squ
 
 class CheckmateValidator : VictoryValidator {
     override fun validateVictory(pieces: Map<Square, Piece>, currentPlayer: PieceColor): VictoryResult {
-        var state = getInitialState(pieces, currentPlayer);
+        var state = getInitialState(pieces, currentPlayer)
+
         if(noMoreOpponentPieces(pieces, currentPlayer)) return NoMoreOpponentPieces()
+
         var oppIndex : Int
         var typeResult : ValidatorResult
         for (square in state.squares){
             oppIndex = 0
-            while (state.opponentSquares.isNotEmpty() && oppIndex < state.opponentSquares.size){
+            while (checkSizeOfOppSquares(state, oppIndex)){
                 typeResult = getValidatorResult(square, state.opponentSquares[oppIndex], pieces)
                 if(typeResult.isValid())
-                    state = InitialState(state.squares, state.opponentSquares.filterIndexed { index, _ -> index != oppIndex })
+                    state = changeState(state, oppIndex)
                 else oppIndex++
             }
         }
         if(state.opponentSquares.isEmpty()) return CheckmateResult()
         return ContinueResult()
     }
+
+    private fun checkSizeOfOppSquares(
+        state: InitialState,
+        oppIndex: Int
+    ) = state.opponentSquares.isNotEmpty() && oppIndex < state.opponentSquares.size
+
+    private fun changeState(
+        state: InitialState,
+        oppIndex: Int
+    ) = InitialState(state.squares, state.opponentSquares.filterIndexed { index, _ -> index != oppIndex })
 
     private fun noMoreOpponentPieces(pieces: Map<Square, Piece>, currentPlayer: PieceColor): Boolean {
         return pieces
@@ -54,7 +66,7 @@ class CheckmateValidator : VictoryValidator {
     
     private fun getInitialState(pieces: Map<Square, Piece>, currentPlayer: PieceColor): InitialState{
         val squares = getSquaresByColor(pieces, currentPlayer) { _ -> true }
-        var opponentSquares = getSquaresByColor(pieces, getOpponentColor(currentPlayer)
+        val opponentSquares = getSquaresByColor(pieces, getOpponentColor(currentPlayer)
         ) { piece -> piece.chessPiece == ChessPiece.KING }
         return InitialState(squares, opponentSquares)
 
