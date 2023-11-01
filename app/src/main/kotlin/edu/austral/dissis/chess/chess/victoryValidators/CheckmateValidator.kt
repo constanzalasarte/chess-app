@@ -1,5 +1,6 @@
 package edu.austral.dissis.chess.chess.victoryValidators
 
+import edu.austral.dissis.chess.chess.ChessPiece
 import edu.austral.dissis.chess.chess.Piece
 import edu.austral.dissis.chess.chess.PieceColor
 import edu.austral.dissis.chess.chess.Square
@@ -10,31 +11,38 @@ import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
 * it should be run after each move
 */
 
+data class InitialState(val squares: List<Square>, val opponentSquares: List<Square>)
+
 class CheckmateValidator : VictoryValidator {
     override fun validateVictory(pieces: Map<Square, Piece>, currentPlayer: PieceColor): VictoryResult {
-        val squares = getSquaresByColor(pieces, currentPlayer)
-        val opponentSquares = getSquaresByColor(pieces, getOpponentColor(currentPlayer))
-        if(opponentSquares.isEmpty()) return VictoryResult(TypeVictoryResult.NO_MORE_OPPONENT_PIECES)
-
+        var state = getInitialState(pieces, currentPlayer);
+        if(noMoreOpponentPieces(pieces, currentPlayer)) return NoMoreOpponentPieces()
         var oppIndex : Int
         var typeResult : ValidatorResult
-        for (square in squares){
+        for (square in state.squares){
             oppIndex = 0
-            while (opponentSquares.isNotEmpty() && oppIndex < opponentSquares.size){
-                typeResult = getValidatorResult(square, opponentSquares[oppIndex], pieces)
+            while (state.opponentSquares.isNotEmpty() && oppIndex < state.opponentSquares.size){
+                typeResult = getValidatorResult(square, state.opponentSquares[oppIndex], pieces)
                 if(typeResult.isValid())
-                    opponentSquares.removeAt(oppIndex)
+                    state = InitialState(state.squares, state.opponentSquares.filterIndexed { index, _ -> index != oppIndex })
                 else oppIndex++
             }
         }
-        if(opponentSquares.isEmpty()) return VictoryResult(TypeVictoryResult.CHECKMATE)
-        return VictoryResult(TypeVictoryResult.CONTINUE)
+        if(state.opponentSquares.isEmpty()) return CheckmateResult()
+        return ContinueResult()
     }
-    private fun getSquaresByColor(pieces: Map<Square, Piece>, color: PieceColor): ArrayList<Square> {
-        val squares = ArrayList<Square>()
-        for ((square, piece) in pieces)
-            if(piece.color == color) squares.add(square)
-        return squares
+
+    private fun noMoreOpponentPieces(pieces: Map<Square, Piece>, currentPlayer: PieceColor): Boolean {
+        return pieces
+            .filter{ it.value.color == currentPlayer}
+            .map { it.key }
+            .isEmpty()
+    }
+
+    private fun getSquaresByColor(pieces: Map<Square, Piece>, color: PieceColor, condition: (Piece) -> Boolean): List<Square> {
+        return pieces
+            .filter{ it.value.color == color && condition(it.value)}
+            .map { it.key }
     }
     private fun getOpponentColor(currentPlayer: PieceColor): PieceColor{
         if(currentPlayer == PieceColor.BLACK) return PieceColor.WHITE
@@ -42,5 +50,13 @@ class CheckmateValidator : VictoryValidator {
     }
     private fun getValidatorResult(from: Square, to: Square, pieces:Map<Square, Piece>): ValidatorResult{
         return pieces[from]!!.validationMapper.move(from, to, pieces)
+    }
+    
+    private fun getInitialState(pieces: Map<Square, Piece>, currentPlayer: PieceColor): InitialState{
+        val squares = getSquaresByColor(pieces, currentPlayer) { _ -> true }
+        var opponentSquares = getSquaresByColor(pieces, getOpponentColor(currentPlayer)
+        ) { piece -> piece.chessPiece == ChessPiece.KING }
+        return InitialState(squares, opponentSquares)
+
     }
 }

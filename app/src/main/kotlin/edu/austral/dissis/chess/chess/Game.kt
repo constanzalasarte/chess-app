@@ -6,8 +6,10 @@ import edu.austral.dissis.chess.chess.validators.result.InvalidResult
 import edu.austral.dissis.chess.chess.validators.result.ValidResult
 import edu.austral.dissis.chess.chess.validators.result.ValidWExecutionResult
 import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
+import edu.austral.dissis.chess.chess.victoryValidators.CheckmateResult
 import edu.austral.dissis.chess.chess.victoryValidators.CheckmateValidator
-import edu.austral.dissis.chess.chess.victoryValidators.TypeVictoryResult
+import edu.austral.dissis.chess.chess.victoryValidators.NoMoreOpponentPieces
+import edu.austral.dissis.chess.chess.victoryValidators.VictoryResult
 
 class ClassicGame(val map: MutableMap<Square, Piece>, private var currentColor: PlayerColor, private val boardSize: Int) : GameEngine {
     private val victoryValidator = CheckmateValidator()
@@ -44,9 +46,9 @@ class ClassicGame(val map: MutableMap<Square, Piece>, private var currentColor: 
         val chessPieces = getChessPieces()
 
         val victoryResult = getVictoryResult()
-        if(victoryResult == TypeVictoryResult.CHECKMATE)
+        if(victoryResult is CheckmateResult)
             return (GameOver(currentColor))
-        else if (victoryResult == TypeVictoryResult.NO_MORE_OPPONENT_PIECES){
+        else if (victoryResult is NoMoreOpponentPieces){
             println("TIE!")
             return (GameOver(currentColor))
         }
@@ -55,8 +57,8 @@ class ClassicGame(val map: MutableMap<Square, Piece>, private var currentColor: 
         return NewGameState(chessPieces, currentColor)
     }
 
-    private fun getVictoryResult(): TypeVictoryResult {
-        return victoryValidator.validateVictory(map, playerToPieceColor(currentColor)).victoryResult
+    private fun getVictoryResult(): VictoryResult {
+        return victoryValidator.validateVictory(map, playerToPieceColor(currentColor))
     }
 
     private fun getChessPieces(): ArrayList<ChessPiece>{
