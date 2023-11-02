@@ -9,7 +9,7 @@ import edu.austral.dissis.chess.common.validationEngine.ValidationEngine
 import java.io.File
 import java.lang.Exception
 
-class BoarderReader(private val posiblePieces: List<ChessPiece>, private val engine: Engine){
+class BoarderReader(private val enginePieces: Map<ChessPiece, ValidationEngine>){
     fun getMap(fileName: String) : MutableMap<Square, Piece>{
         val inputString : String = readFile(fileName)
 
@@ -43,7 +43,7 @@ class BoarderReader(private val posiblePieces: List<ChessPiece>, private val eng
     }
     private fun createPiece(string: String, indexString: Int, indexList: Int): Piece {
 
-        val piece = posiblePieces.filter { string[0] == it.toString()[0] }
+        val piece : List<ChessPiece> = enginePieces.keys.filter { string[0] == it.toString()[0] }
         if (piece.isEmpty()) throw Exception("INCORRECT CHESS PIECE")
         val chessPiece = piece[0]
 
@@ -52,16 +52,9 @@ class BoarderReader(private val posiblePieces: List<ChessPiece>, private val eng
             'B' -> PieceColor.BLACK
             else -> throw Exception("INCORRECT COLOR PIECE")
         }
-//        PODES HACER UN MAPA
-        val validationEngine: ValidationEngine = when (string[0]){
-            'P' -> engine.pawnEngine()
-            'H' -> engine.horseEngine()
-            'B' -> engine.bishopEngine()
-            'R' -> engine.rookEngine()
-            'Q' -> engine.queenEngine()
-            'K' -> engine.kingEngine()
-            else -> throw Exception("INCORRECT CHESS PIECE")
-        }
+
+        val validationEngine: ValidationEngine =
+            enginePieces.get(piece[0]) ?: throw Exception("INCORRECT CHESS PIECE");
         return Piece(string + indexString.toString() + indexList.toString(), colorPiece, chessPiece, 0, validationEngine)
     }
 }

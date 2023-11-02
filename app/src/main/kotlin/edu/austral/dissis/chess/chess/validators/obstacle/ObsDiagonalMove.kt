@@ -20,15 +20,14 @@ class ObsDiagonalMove: ObstaclePiece(){
 
             if(isObstacle(square, pieces)) return InvalidResult()
 
-            if(horizontal < 0){
-                horizontal++
-                vertical++
-            }
-            else{
-                horizontal--
-                vertical--
-            }
+            vertical = incrementCoordinate(vertical)
+            horizontal = incrementCoordinate(horizontal)
         }
         return ValidResult()
+    }
+    private fun incrementCoordinate(coordinate: Int): Int{
+        if (coordinate < 0) return coordinate + 1
+        return coordinate - 1
+
     }
 }

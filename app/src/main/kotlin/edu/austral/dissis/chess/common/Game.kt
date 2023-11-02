@@ -10,9 +10,10 @@ import edu.austral.dissis.chess.common.victoryValidators.*
 import edu.austral.dissis.chess.common.victoryValidators.result.ContinueResult
 import edu.austral.dissis.chess.common.victoryValidators.result.VictoryResult
 import edu.austral.dissis.chess.gui.InitialState
+import kotlin.math.abs
 
 class Game(
-    val map: MutableMap<Square, Piece>,
+    var map: Map<Square, Piece>,
     private var currentColor: PlayerColor,
     private val boardSize: Int,
     private val victoryValidators: List<VictoryValidator>
@@ -45,10 +46,12 @@ class Game(
 
             when (result) {
                 is InvalidResult -> return InvalidMove("Invalid move")
-                is ValidResult -> movePiece(fromSquare, toSquare)
+                is ValidResult -> {
+                    map = movePiece(fromSquare, toSquare)
+                }
                 is ValidWExecutionResult -> {
                     applyMove(Move(squareToPosition(result.fromSquare), squareToPosition(result.toSquare)))
-                    movePiece(fromSquare, toSquare)
+                    map = movePiece(fromSquare, toSquare)
                     changeCurrentColor()
                 }
             }
@@ -114,13 +117,13 @@ class Game(
         return PieceColor.BLACK
     }
     private fun squareToPosition(square: Square) : Position {
-        return Position(coordinateUIToSquare(square.vertical)+1, coordinateUIToSquare(square.horizontal)+1)
+        return Position(coordinateUIToSquare(square.vertical), square.horizontal+1)
     }
 
 
     private fun positionToSquare(position: Position): Square {
-        val vertical = coordinateUIToSquare(position.component1() - 1)
-        val horizontal = coordinateUIToSquare(position.component2()-1)
+        val vertical = coordinateUIToSquare(position.component1())
+        val horizontal = position.component2()-1
         return Square(vertical, horizontal)
     }
 
@@ -128,8 +131,10 @@ class Game(
         return map[square]
     }
 
-    private fun movePiece(from: Square, to: Square){
-        map[to] = map.remove(from)!!
+    private fun movePiece(from: Square, to: Square) : Map<Square, Piece> {
+        val piece : Piece = map[from] ?: return emptyMap()
+        piece.incrementMove()
+        return map.filter { (square, _) ->  square != from} + (to to piece)
     }
 
 
@@ -139,16 +144,6 @@ class Game(
     }
 
     private fun coordinateUIToSquare(coordinate: Int) : Int {
-        return when (coordinate) {
-            7 -> 0
-            6 -> 1
-            5 -> 2
-            4 -> 3
-            3 -> 4
-            2 -> 5
-            1 -> 6
-            0 -> 7
-            else -> 0
-        }
+        return boardSize - coordinate
     }
 }

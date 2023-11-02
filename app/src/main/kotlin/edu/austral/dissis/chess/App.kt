@@ -6,7 +6,10 @@ package edu.austral.dissis.chess
 import edu.austral.dissis.chess.common.Game
 import edu.austral.dissis.chess.chess.boarderReader.BoarderReader
 import edu.austral.dissis.chess.chess.createValidationEngine.ClassicEngine
+import edu.austral.dissis.chess.chess.validators.EdgeSquare
 import edu.austral.dissis.chess.common.ChessPiece
+import edu.austral.dissis.chess.common.validationEngine.GraphNode
+import edu.austral.dissis.chess.common.validationEngine.ValidationEngine
 import edu.austral.dissis.chess.common.victoryValidators.CheckmateValidator
 import edu.austral.dissis.chess.common.victoryValidators.NoOppPiecesValidator
 import edu.austral.dissis.chess.gui.*
@@ -21,12 +24,24 @@ fun main() {
 }
 
 class ChessGameApplication : Application() {
-    private val chessPieces = listOf(ChessPiece.BISHOP, ChessPiece.HORSE, ChessPiece.KING, ChessPiece.PAWN, ChessPiece.QUEEN, ChessPiece.ROOK)
-    private val boarderReader = BoarderReader(chessPieces, ClassicEngine())
+    private val maxRow = 8
+    private val maxCol = 8
+    private val classicEngine = ClassicEngine(maxRow, maxCol)
+    private val enginePieces: Map<ChessPiece, ValidationEngine> = mapOf(
+        ChessPiece.KING to classicEngine.kingEngine(),
+        ChessPiece.QUEEN to classicEngine.queenEngine(),
+        ChessPiece.ROOK to classicEngine.rookEngine(),
+        ChessPiece.BISHOP to classicEngine.bishopEngine(),
+        ChessPiece.HORSE to classicEngine.horseEngine(),
+        ChessPiece.PAWN to classicEngine.pawnEngine(),
+        ChessPiece.CHANCELLOR to GraphNode(EdgeSquare(maxRow, maxCol), listOf( classicEngine.horseEngine(), classicEngine.rookEngine())),
+        ChessPiece.ARCHBISHOP to GraphNode(EdgeSquare(maxRow, maxCol), listOf( classicEngine.horseEngine(), classicEngine.bishopEngine())),
+        )
+    private val boarderReader = BoarderReader(enginePieces)
 //    private val checkmatePieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/checkmate.txt", ClassicEngine(), chessPieces)
 //    private val noMoreOpponentPieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/NoMoreOppPieces", ClassicEngine(), chessPieces)
     private val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/beginning")
-    private val adapter = Game(pieces, PlayerColor.BLACK, 8, listOf(CheckmateValidator(), NoOppPiecesValidator()))
+    private val adapter = Game(pieces, PlayerColor.BLACK, maxCol, listOf(CheckmateValidator(), NoOppPiecesValidator()))
     private val imageResolver = CachedImageResolver(DefaultImageResolver())
 
     companion object {
@@ -40,6 +55,5 @@ class ChessGameApplication : Application() {
         primaryStage.scene = Scene(root)
 
         primaryStage.show()
-        println(ChessPiece.KING.toString()[0])
     }
 }

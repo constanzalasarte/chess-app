@@ -14,7 +14,7 @@ class LMove: MoveValidator() {
         var result = false
         if(abs(vertical) == 2) result = (abs(horizontal) == 1)
         else if(abs(horizontal) == 2) result = abs(vertical) == 1
-        if(result) return ValidResult()
+        if(result && checkIncrementByColor(vertical, pieces.get(from)!!.color)) return ValidResult()
         return InvalidResult()
     }
 }

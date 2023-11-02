@@ -10,7 +10,7 @@ class VerticalMove: MoveValidator() {
     override fun validateMove(from: Square, to: Square, pieces: Map<Square, Piece>) : ValidatorResult {
         val vertical = quantitySquaresBtw(from.vertical, to.vertical)
         val horizontal = quantitySquaresBtw(from.horizontal, to.horizontal)
-        if(vertical != 0 && horizontal == 0) return ValidResult()
+        if(vertical != 0 && horizontal == 0 && checkIncrementByColor(vertical, pieces.get(from)!!.color)) return ValidResult()
         return InvalidResult()
     }
 }
