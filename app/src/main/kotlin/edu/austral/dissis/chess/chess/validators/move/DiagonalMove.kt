@@ -1,7 +1,7 @@
 package edu.austral.dissis.chess.chess.validators.move
 
-import edu.austral.dissis.chess.chess.Piece
-import edu.austral.dissis.chess.chess.Square
+import edu.austral.dissis.chess.common.Piece
+import edu.austral.dissis.chess.common.Square
 import edu.austral.dissis.chess.chess.validators.result.InvalidResult
 import edu.austral.dissis.chess.chess.validators.result.ValidResult
 import edu.austral.dissis.chess.chess.validators.result.ValidatorResult

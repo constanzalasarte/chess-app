@@ -1,4 +1,4 @@
-package edu.austral.dissis.chess.chess
+package edu.austral.dissis.chess.common
 
 class Square (
     val vertical: Int,

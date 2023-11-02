@@ -1,10 +1,14 @@
-package edu.austral.dissis.chess.chess.victoryValidators
+package edu.austral.dissis.chess.common.victoryValidators
 
-import edu.austral.dissis.chess.chess.ChessPiece
-import edu.austral.dissis.chess.chess.Piece
-import edu.austral.dissis.chess.chess.PieceColor
-import edu.austral.dissis.chess.chess.Square
+import edu.austral.dissis.chess.common.ChessPiece
+import edu.austral.dissis.chess.common.Piece
+import edu.austral.dissis.chess.common.PieceColor
+import edu.austral.dissis.chess.common.Square
 import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
+import edu.austral.dissis.chess.common.victoryValidators.result.CheckmateResult
+import edu.austral.dissis.chess.common.victoryValidators.result.ContinueResult
+import edu.austral.dissis.chess.common.victoryValidators.result.NoMoreOpponentPieces
+import edu.austral.dissis.chess.common.victoryValidators.result.VictoryResult
 
 /*
 * A validator that checks if the current player has won by checkmate
@@ -15,9 +19,8 @@ data class InitialState(val squares: List<Square>, val opponentSquares: List<Squ
 
 class CheckmateValidator : VictoryValidator {
     override fun validateVictory(pieces: Map<Square, Piece>, currentPlayer: PieceColor): VictoryResult {
+        val initialState = getInitialState(pieces, currentPlayer)
         var state = getInitialState(pieces, currentPlayer)
-
-        if(noMoreOpponentPieces(pieces, currentPlayer)) return NoMoreOpponentPieces()
 
         var oppIndex : Int
         var typeResult : ValidatorResult
@@ -30,7 +33,7 @@ class CheckmateValidator : VictoryValidator {
                 else oppIndex++
             }
         }
-        if(state.opponentSquares.isEmpty()) return CheckmateResult()
+        if(state.opponentSquares != initialState.opponentSquares) return CheckmateResult()
         return ContinueResult()
     }
 
@@ -44,19 +47,12 @@ class CheckmateValidator : VictoryValidator {
         oppIndex: Int
     ) = InitialState(state.squares, state.opponentSquares.filterIndexed { index, _ -> index != oppIndex })
 
-    private fun noMoreOpponentPieces(pieces: Map<Square, Piece>, currentPlayer: PieceColor): Boolean {
-        return pieces
-            .filter{ it.value.color == currentPlayer}
-            .map { it.key }
-            .isEmpty()
-    }
-
     private fun getSquaresByColor(pieces: Map<Square, Piece>, color: PieceColor, condition: (Piece) -> Boolean): List<Square> {
         return pieces
             .filter{ it.value.color == color && condition(it.value)}
             .map { it.key }
     }
-    private fun getOpponentColor(currentPlayer: PieceColor): PieceColor{
+    private fun getOpponentColor(currentPlayer: PieceColor): PieceColor {
         if(currentPlayer == PieceColor.BLACK) return PieceColor.WHITE
         return PieceColor.BLACK
     }

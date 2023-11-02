@@ -1,4 +1,4 @@
-package edu.austral.dissis.chess.chess
+package edu.austral.dissis.chess.common
 
 import edu.austral.dissis.chess.gui.*
 import edu.austral.dissis.chess.gui.ChessPiece
@@ -6,41 +6,56 @@ import edu.austral.dissis.chess.chess.validators.result.InvalidResult
 import edu.austral.dissis.chess.chess.validators.result.ValidResult
 import edu.austral.dissis.chess.chess.validators.result.ValidWExecutionResult
 import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
-import edu.austral.dissis.chess.chess.victoryValidators.CheckmateResult
-import edu.austral.dissis.chess.chess.victoryValidators.CheckmateValidator
-import edu.austral.dissis.chess.chess.victoryValidators.NoMoreOpponentPieces
-import edu.austral.dissis.chess.chess.victoryValidators.VictoryResult
+import edu.austral.dissis.chess.common.victoryValidators.*
+import edu.austral.dissis.chess.common.victoryValidators.result.ContinueResult
+import edu.austral.dissis.chess.common.victoryValidators.result.VictoryResult
+import edu.austral.dissis.chess.gui.InitialState
 
-class ClassicGame(val map: MutableMap<Square, Piece>, private var currentColor: PlayerColor, private val boardSize: Int) : GameEngine {
-    private val victoryValidator = CheckmateValidator()
+class Game(
+    val map: MutableMap<Square, Piece>,
+    private var currentColor: PlayerColor,
+    private val boardSize: Int,
+    private val victoryValidators: List<VictoryValidator>
+    ) : GameEngine {
 
     override fun init(): InitialState {
         return InitialState(BoardSize(boardSize, boardSize), getChessPieces(), currentColor)
     }
 
+    private fun checkCurrentPieces(): Boolean {
+        val squares = map.filter{ it.value.color == playerToPieceColor(currentColor) }
+                         .map { it.key }
+        val opponentSquares = map.filter{ it.value.color == playerToPieceColor(currentColor) }
+                                 .map { it.key }
+        return squares.isNotEmpty() && opponentSquares.isNotEmpty()
+    }
+
     override fun applyMove(move: Move): MoveResult {
-        val fromSquare = positionToSquare(move.component1())
-        val toSquare = positionToSquare(move.component2())
+        if(checkCurrentPieces()){
+            val fromSquare = positionToSquare(move.component1())
+            val toSquare = positionToSquare(move.component2())
 
-        val piece = getPiece(fromSquare)
-        if(fromSquare == toSquare) return InvalidMove("Invalid move")
-        if(piece == null) return InvalidMove("No piece in (" + fromSquare.horizontal + ", " + fromSquare.vertical + ')')
-        else if (pieceToPlayerColor(piece.color) != currentColor)
-            return InvalidMove("Piece does not belong to current player")
+            val piece = getPiece(fromSquare)
+            if(fromSquare == toSquare) return InvalidMove("Invalid move")
+            if(piece == null) return InvalidMove("No piece in (" + fromSquare.horizontal + ", " + fromSquare.vertical + ')')
+            else if (pieceToPlayerColor(piece.color) != currentColor)
+                return InvalidMove("Piece does not belong to current player")
 
+            val result: ValidatorResult = piece.move(fromSquare, toSquare, map)
 
-        when (val result: ValidatorResult = piece.move(fromSquare, toSquare, map)) {
-            is InvalidResult -> return InvalidMove("Invalid move")
-            is ValidResult -> movePiece(fromSquare, toSquare)
-            is ValidWExecutionResult -> {
-                applyMove(Move(squareToPosition(result.fromSquare), squareToPosition(result.toSquare)))
-                movePiece(fromSquare, toSquare)
-                currentColor = getOpponentColor()
-                changeCurrentColor()
+            when (result) {
+                is InvalidResult -> return InvalidMove("Invalid move")
+                is ValidResult -> movePiece(fromSquare, toSquare)
+                is ValidWExecutionResult -> {
+                    applyMove(Move(squareToPosition(result.fromSquare), squareToPosition(result.toSquare)))
+                    movePiece(fromSquare, toSquare)
+                    changeCurrentColor()
+                }
             }
-        }
 
-        return statusGame()
+            return statusGame()
+        }
+        return InvalidMove("GAME OVER")
     }
 
 
@@ -60,12 +75,21 @@ class ClassicGame(val map: MutableMap<Square, Piece>, private var currentColor: 
     }
 
     private fun getLostResult(): VictoryResult {
-        return victoryValidator.validateVictory(map, playerToPieceColor(getOpponentColor()))
-
+        var result : VictoryResult = ContinueResult()
+        victoryValidators.forEach{
+            result = it.validateVictory(map, playerToPieceColor(getOpponentColor()))
+            if(result.isOver()) return result
+        }
+        return result
     }
 
     private fun getVictoryResult(): VictoryResult {
-        return victoryValidator.validateVictory(map, playerToPieceColor(currentColor))
+        var result : VictoryResult = ContinueResult()
+        victoryValidators.forEach{
+            result = it.validateVictory(map, playerToPieceColor(currentColor))
+            if(result.isOver()) return result
+        }
+        return result
     }
 
     private fun getChessPieces(): ArrayList<ChessPiece>{
@@ -82,10 +106,10 @@ class ClassicGame(val map: MutableMap<Square, Piece>, private var currentColor: 
         return ChessPiece(piece.id, pieceToPlayerColor(piece.color), squareToPosition(square), piece.getPieceId())
     }
     private fun pieceToPlayerColor(color: PieceColor) : PlayerColor{
-        if(color==PieceColor.WHITE) return PlayerColor.WHITE
+        if(color== PieceColor.WHITE) return PlayerColor.WHITE
         return PlayerColor.BLACK
     }
-    private fun playerToPieceColor(color: PlayerColor) : PieceColor{
+    private fun playerToPieceColor(color: PlayerColor) : PieceColor {
         if(color==PlayerColor.WHITE) return PieceColor.WHITE
         return PieceColor.BLACK
     }

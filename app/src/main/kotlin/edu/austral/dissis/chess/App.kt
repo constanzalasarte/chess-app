@@ -3,9 +3,12 @@
  */
 package edu.austral.dissis.chess
 
-import edu.austral.dissis.chess.chess.ClassicGame
+import edu.austral.dissis.chess.common.Game
 import edu.austral.dissis.chess.chess.boarderReader.BoarderReader
 import edu.austral.dissis.chess.chess.createValidationEngine.ClassicEngine
+import edu.austral.dissis.chess.common.ChessPiece
+import edu.austral.dissis.chess.common.victoryValidators.CheckmateValidator
+import edu.austral.dissis.chess.common.victoryValidators.NoOppPiecesValidator
 import edu.austral.dissis.chess.gui.*
 import javafx.application.Application
 import javafx.application.Application.launch
@@ -18,10 +21,12 @@ fun main() {
 }
 
 class ChessGameApplication : Application() {
-    private val boarderReader = BoarderReader()
-    private val checkmatePieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/checkmate.txt", ClassicEngine())
-//    private val pieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/beginning", ClassicEngine())
-    private val adapter = ClassicGame(checkmatePieces, PlayerColor.BLACK, 8)
+    private val chessPieces = listOf(ChessPiece.BISHOP, ChessPiece.HORSE, ChessPiece.KING, ChessPiece.PAWN, ChessPiece.QUEEN, ChessPiece.ROOK)
+    private val boarderReader = BoarderReader(chessPieces, ClassicEngine())
+//    private val checkmatePieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/checkmate.txt", ClassicEngine(), chessPieces)
+//    private val noMoreOpponentPieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/NoMoreOppPieces", ClassicEngine(), chessPieces)
+    private val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/beginning")
+    private val adapter = Game(pieces, PlayerColor.BLACK, 8, listOf(CheckmateValidator(), NoOppPiecesValidator()))
     private val imageResolver = CachedImageResolver(DefaultImageResolver())
 
     companion object {
@@ -35,5 +40,6 @@ class ChessGameApplication : Application() {
         primaryStage.scene = Scene(root)
 
         primaryStage.show()
+        println(ChessPiece.KING.toString()[0])
     }
 }

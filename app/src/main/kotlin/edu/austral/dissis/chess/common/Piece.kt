@@ -1,6 +1,6 @@
-package edu.austral.dissis.chess.chess
+package edu.austral.dissis.chess.common
 
-import edu.austral.dissis.chess.chess.validationEngine.ValidationEngine
+import edu.austral.dissis.chess.common.validationEngine.ValidationEngine
 import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
 
 class Piece(

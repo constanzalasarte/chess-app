@@ -1,7 +1,7 @@
-package edu.austral.dissis.chess.chess.validationEngine
+package edu.austral.dissis.chess.common.validationEngine
 
-import edu.austral.dissis.chess.chess.Piece
-import edu.austral.dissis.chess.chess.Square
+import edu.austral.dissis.chess.common.Piece
+import edu.austral.dissis.chess.common.Square
 import edu.austral.dissis.chess.chess.validators.MovementValidator
 import edu.austral.dissis.chess.chess.validators.result.InvalidResult
 import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
@@ -22,7 +22,7 @@ class GraphNode(
         return InvalidResult()
     }
 
-    private fun checkNodes(from: Square, to: Square , pieces: Map<Square, Piece>): ValidatorResult {
+    private fun checkNodes(from: Square, to: Square, pieces: Map<Square, Piece>): ValidatorResult {
         var result : ValidatorResult = InvalidResult()
         for (graph in graphNodes) {
             val validatorResult = graph.move(from, to, pieces)

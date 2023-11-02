@@ -2,8 +2,8 @@ package edu.austral.dissis.chess.chess.createValidationEngine
 
 import CheckDestinationSquare
 import edu.austral.dissis.chess.chess.validators.CheckOriginSquare
-import edu.austral.dissis.chess.chess.validationEngine.GraphNode
-import edu.austral.dissis.chess.chess.validationEngine.ValidationEngine
+import edu.austral.dissis.chess.common.validationEngine.GraphNode
+import edu.austral.dissis.chess.common.validationEngine.ValidationEngine
 import edu.austral.dissis.chess.chess.validators.*
 import edu.austral.dissis.chess.chess.validators.move.*
 import edu.austral.dissis.chess.chess.validators.obstacle.ObsDiagonalMove
