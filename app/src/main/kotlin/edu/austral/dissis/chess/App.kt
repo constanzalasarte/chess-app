@@ -3,15 +3,18 @@
  */
 package edu.austral.dissis.chess
 
+import edu.austral.dissis.chess.checkers.CheckersNextColor
 import edu.austral.dissis.chess.common.Game
 import edu.austral.dissis.chess.chess.boarderReader.BoarderReader
 import edu.austral.dissis.chess.chess.createValidationEngine.ClassicEngine
-import edu.austral.dissis.chess.chess.validators.EdgeSquare
+import edu.austral.dissis.chess.common.validators.EdgeSquare
 import edu.austral.dissis.chess.common.ChessPiece
 import edu.austral.dissis.chess.common.validationEngine.GraphNode
 import edu.austral.dissis.chess.common.validationEngine.ValidationEngine
-import edu.austral.dissis.chess.common.victoryValidators.CheckmateValidator
-import edu.austral.dissis.chess.common.victoryValidators.NoOppPiecesValidator
+import edu.austral.dissis.chess.chess.victoryValidators.CheckmateValidator
+import edu.austral.dissis.chess.checkers.victoryValidators.NoOppPiecesValidator
+import edu.austral.dissis.chess.checkers.victoryValidators.createValidationEngine.ClassicEngineCheckers
+import edu.austral.dissis.chess.chess.ChessNextColor
 import edu.austral.dissis.chess.gui.*
 import javafx.application.Application
 import javafx.application.Application.launch
@@ -20,7 +23,8 @@ import javafx.stage.Stage
 
 
 fun main() {
-    launch(ChessGameApplication::class.java)
+//    launch(ChessGameApplication::class.java)
+    launch(CheckersGameApplication::class.java)
 }
 
 class ChessGameApplication : Application() {
@@ -38,10 +42,36 @@ class ChessGameApplication : Application() {
         ChessPiece.ARCHBISHOP to GraphNode(EdgeSquare(maxRow, maxCol), listOf( classicEngine.horseEngine(), classicEngine.bishopEngine())),
         )
     private val boarderReader = BoarderReader(enginePieces)
-//    private val checkmatePieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/checkmate.txt", ClassicEngine(), chessPieces)
+//    private val checkmatePieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/chess/checkmate.txt", ClassicEngine(), chessPieces)
+//    private val noMoreOpponentPieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/chess/NoMoreOppPieces", ClassicEngine(), chessPieces)
+    private val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/chess/beginning")
+    private val adapter = Game(pieces, PlayerColor.BLACK, maxCol, listOf(CheckmateValidator(), NoOppPiecesValidator()), ChessNextColor())
+    private val imageResolver = CachedImageResolver(DefaultImageResolver())
+
+    companion object {
+        const val GameTitle = "Chess"
+    }
+
+    override fun start(primaryStage: Stage) {
+        primaryStage.title = GameTitle
+
+        val root = GameView(adapter, imageResolver)
+        primaryStage.scene = Scene(root)
+
+        primaryStage.show()
+    }
+}
+
+class CheckersGameApplication : Application() {
+    private val classicEngine = ClassicEngineCheckers()
+    private val enginePieces: Map<ChessPiece, ValidationEngine> = mapOf(
+        ChessPiece.PAWN to classicEngine.basicEngine(),
+    )
+    private val boarderReader = BoarderReader(enginePieces)
+    //    private val checkmatePieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/checkmate.txt", ClassicEngine(), chessPieces)
 //    private val noMoreOpponentPieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/NoMoreOppPieces", ClassicEngine(), chessPieces)
-    private val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/beginning")
-    private val adapter = Game(pieces, PlayerColor.BLACK, maxCol, listOf(CheckmateValidator(), NoOppPiecesValidator()))
+    private val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/checkers/beginning")
+    private val adapter = Game(pieces, PlayerColor.BLACK, 8, listOf(NoOppPiecesValidator()), CheckersNextColor())
     private val imageResolver = CachedImageResolver(DefaultImageResolver())
 
     companion object {

@@ -1,7 +1,7 @@
 package edu.austral.dissis.chess.common
 
 import edu.austral.dissis.chess.common.validationEngine.ValidationEngine
-import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
+import edu.austral.dissis.chess.common.validators.result.ValidatorResult
 
 class Piece(
 //    var active: Boolean,

@@ -2,9 +2,10 @@ package edu.austral.dissis.chess.chess.validators.move
 
 import edu.austral.dissis.chess.common.Piece
 import edu.austral.dissis.chess.common.Square
-import edu.austral.dissis.chess.chess.validators.result.InvalidResult
-import edu.austral.dissis.chess.chess.validators.result.ValidResult
-import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
+import edu.austral.dissis.chess.common.validators.result.InvalidResult
+import edu.austral.dissis.chess.common.validators.result.ValidResult
+import edu.austral.dissis.chess.common.validators.result.ValidatorResult
+import edu.austral.dissis.chess.common.validators.move.MoveValidator
 
 
 class HorizontalMove: MoveValidator() {

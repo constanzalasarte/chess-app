@@ -1,13 +1,12 @@
-package edu.austral.dissis.chess.common.victoryValidators
+package edu.austral.dissis.chess.chess.victoryValidators
 
 import edu.austral.dissis.chess.common.ChessPiece
 import edu.austral.dissis.chess.common.Piece
 import edu.austral.dissis.chess.common.PieceColor
 import edu.austral.dissis.chess.common.Square
-import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
-import edu.austral.dissis.chess.common.victoryValidators.result.CheckmateResult
+import edu.austral.dissis.chess.common.validators.result.ValidatorResult
+import edu.austral.dissis.chess.common.victoryValidators.VictoryValidator
 import edu.austral.dissis.chess.common.victoryValidators.result.ContinueResult
-import edu.austral.dissis.chess.common.victoryValidators.result.NoMoreOpponentPieces
 import edu.austral.dissis.chess.common.victoryValidators.result.VictoryResult
 
 /*
@@ -56,11 +55,11 @@ class CheckmateValidator : VictoryValidator {
         if(currentPlayer == PieceColor.BLACK) return PieceColor.WHITE
         return PieceColor.BLACK
     }
-    private fun getValidatorResult(from: Square, to: Square, pieces:Map<Square, Piece>): ValidatorResult{
+    private fun getValidatorResult(from: Square, to: Square, pieces:Map<Square, Piece>): ValidatorResult {
         return pieces[from]!!.validationMapper.move(from, to, pieces)
     }
     
-    private fun getInitialState(pieces: Map<Square, Piece>, currentPlayer: PieceColor): InitialState{
+    private fun getInitialState(pieces: Map<Square, Piece>, currentPlayer: PieceColor): InitialState {
         val squares = getSquaresByColor(pieces, currentPlayer) { _ -> true }
         val opponentSquares = getSquaresByColor(pieces, getOpponentColor(currentPlayer)
         ) { piece -> piece.chessPiece == ChessPiece.KING }

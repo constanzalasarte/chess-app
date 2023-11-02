@@ -1,8 +1,9 @@
 package edu.austral.dissis.chess.chess.validators.obstacle
 import edu.austral.dissis.chess.common.Piece
 import edu.austral.dissis.chess.common.Square
-import edu.austral.dissis.chess.chess.validators.result.ValidResult
-import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
+import edu.austral.dissis.chess.common.validators.result.ValidResult
+import edu.austral.dissis.chess.common.validators.result.ValidatorResult
+import edu.austral.dissis.chess.common.validators.obstacle.ObstaclePiece
 
 class ObsLMove: ObstaclePiece() {
     override fun validateMove(from: Square, to: Square, pieces: Map<Square, Piece>): ValidatorResult {

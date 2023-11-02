@@ -1,10 +1,10 @@
-package edu.austral.dissis.chess.chess.validators.obstacle
+package edu.austral.dissis.chess.common.validators.obstacle
 
+import edu.austral.dissis.chess.common.validators.MovementValidator
 import edu.austral.dissis.chess.common.Piece
 import edu.austral.dissis.chess.common.Square
-import edu.austral.dissis.chess.chess.validators.MovementValidator
 
-abstract class ObstaclePiece: MovementValidator{
+abstract class ObstaclePiece: MovementValidator {
     fun isObstacle(square: Square, pieces: Map<Square, Piece>): Boolean{
         return pieces.keys.any{it == square && pieces[it] is Piece }
     }

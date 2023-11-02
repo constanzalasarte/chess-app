@@ -1,7 +1,6 @@
 package edu.austral.dissis.chess.chess.createValidationEngine
 
-import CheckDestinationSquare
-import edu.austral.dissis.chess.chess.validators.CheckOriginSquare
+import edu.austral.dissis.chess.common.validators.CheckOriginSquare
 import edu.austral.dissis.chess.common.validationEngine.GraphNode
 import edu.austral.dissis.chess.common.validationEngine.ValidationEngine
 import edu.austral.dissis.chess.chess.validators.*
@@ -9,6 +8,10 @@ import edu.austral.dissis.chess.chess.validators.move.*
 import edu.austral.dissis.chess.chess.validators.obstacle.ObsDiagonalMove
 import edu.austral.dissis.chess.chess.validators.obstacle.ObsHorizontalMove
 import edu.austral.dissis.chess.chess.validators.obstacle.ObsVerticalMove
+import edu.austral.dissis.chess.common.validators.*
+import edu.austral.dissis.chess.common.validators.move.DiagonalMove
+import edu.austral.dissis.chess.common.validators.move.MoveType
+import edu.austral.dissis.chess.common.validators.move.QuantityOfMoves
 
 class ClassicEngine(val maxRow: Int, val maxCol: Int): Engine {
     override fun pawnEngine(): ValidationEngine {

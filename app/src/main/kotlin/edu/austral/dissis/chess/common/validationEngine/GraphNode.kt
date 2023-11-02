@@ -2,9 +2,9 @@ package edu.austral.dissis.chess.common.validationEngine
 
 import edu.austral.dissis.chess.common.Piece
 import edu.austral.dissis.chess.common.Square
-import edu.austral.dissis.chess.chess.validators.MovementValidator
-import edu.austral.dissis.chess.chess.validators.result.InvalidResult
-import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
+import edu.austral.dissis.chess.common.validators.MovementValidator
+import edu.austral.dissis.chess.common.validators.result.InvalidResult
+import edu.austral.dissis.chess.common.validators.result.ValidatorResult
 
 
 class GraphNode(

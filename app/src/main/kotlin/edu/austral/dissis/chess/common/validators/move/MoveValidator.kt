@@ -1,5 +1,6 @@
-package edu.austral.dissis.chess.chess.validators.move
-import edu.austral.dissis.chess.chess.validators.MovementValidator
+package edu.austral.dissis.chess.common.validators.move
+
+import edu.austral.dissis.chess.common.validators.MovementValidator
 import edu.austral.dissis.chess.common.PieceColor
 
 abstract class MoveValidator: MovementValidator {

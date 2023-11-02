@@ -2,10 +2,10 @@ package edu.austral.dissis.chess.common
 
 import edu.austral.dissis.chess.gui.*
 import edu.austral.dissis.chess.gui.ChessPiece
-import edu.austral.dissis.chess.chess.validators.result.InvalidResult
-import edu.austral.dissis.chess.chess.validators.result.ValidResult
+import edu.austral.dissis.chess.common.validators.result.InvalidResult
+import edu.austral.dissis.chess.common.validators.result.ValidResult
 import edu.austral.dissis.chess.chess.validators.result.ValidWExecutionResult
-import edu.austral.dissis.chess.chess.validators.result.ValidatorResult
+import edu.austral.dissis.chess.common.validators.result.ValidatorResult
 import edu.austral.dissis.chess.common.victoryValidators.*
 import edu.austral.dissis.chess.common.victoryValidators.result.ContinueResult
 import edu.austral.dissis.chess.common.victoryValidators.result.VictoryResult
@@ -16,7 +16,8 @@ class Game(
     var map: Map<Square, Piece>,
     private var currentColor: PlayerColor,
     private val boardSize: Int,
-    private val victoryValidators: List<VictoryValidator>
+    private val victoryValidators: List<VictoryValidator>,
+    private val nextColor: GameNextColor
     ) : GameEngine {
 
     override fun init(): InitialState {
@@ -47,11 +48,11 @@ class Game(
             when (result) {
                 is InvalidResult -> return InvalidMove("Invalid move")
                 is ValidResult -> {
-                    map = movePiece(fromSquare, toSquare)
+                    map = nextColor.movePiece(map, fromSquare, toSquare)
                 }
                 is ValidWExecutionResult -> {
                     applyMove(Move(squareToPosition(result.fromSquare), squareToPosition(result.toSquare)))
-                    map = movePiece(fromSquare, toSquare)
+                    map = nextColor.movePiece(map, fromSquare, toSquare)
                     changeCurrentColor()
                 }
             }
@@ -73,7 +74,7 @@ class Game(
             if(getLostResult().isOver())
                 return (GameOver(getOpponentColor()))
         }
-        changeCurrentColor()
+        currentColor = nextColor.getNextColor(map, currentColor)
         return NewGameState(chessPieces, currentColor)
     }
 
@@ -129,12 +130,6 @@ class Game(
 
     private fun getPiece(square: Square): Piece?{
         return map[square]
-    }
-
-    private fun movePiece(from: Square, to: Square) : Map<Square, Piece> {
-        val piece : Piece = map[from] ?: return emptyMap()
-        piece.incrementMove()
-        return map.filter { (square, _) ->  square != from} + (to to piece)
     }
 
 
