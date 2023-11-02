@@ -4,7 +4,6 @@ import edu.austral.dissis.chess.common.ChessPiece
 import edu.austral.dissis.chess.common.Piece
 import edu.austral.dissis.chess.common.PieceColor
 import edu.austral.dissis.chess.common.Square
-import edu.austral.dissis.chess.chess.createValidationEngine.Engine
 import edu.austral.dissis.chess.common.validationEngine.ValidationEngine
 import java.io.File
 import java.lang.Exception
@@ -54,7 +53,7 @@ class BoarderReader(private val enginePieces: Map<ChessPiece, ValidationEngine>)
         }
 
         val validationEngine: ValidationEngine =
-            enginePieces.get(piece[0]) ?: throw Exception("INCORRECT CHESS PIECE");
+            enginePieces.get(piece[0]) ?: throw Exception("INCORRECT CHESS PIECE")
         return Piece(string + indexString.toString() + indexList.toString(), colorPiece, chessPiece, 0, validationEngine)
     }
 }

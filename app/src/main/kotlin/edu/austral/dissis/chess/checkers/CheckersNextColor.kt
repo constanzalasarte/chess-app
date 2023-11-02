@@ -16,8 +16,8 @@ class CheckersNextColor: GameNextColor {
         val pieceColor: PieceColor = if(currentPlayer == PlayerColor.WHITE) PieceColor.WHITE
         else PieceColor.BLACK
         val result = validate(pieces, pieceColor)
-        if(result.isOver()) return currentPlayer
-        else return opponentColor(pieceColor)
+        return if(result.isOver()) currentPlayer
+        else opponentColor(pieceColor)
     }
 
     override fun movePiece(pieces: Map<Square, Piece>, from: Square, to: Square): Map<Square, Piece> {

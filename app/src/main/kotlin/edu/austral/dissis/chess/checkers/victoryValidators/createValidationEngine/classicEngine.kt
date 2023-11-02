@@ -7,7 +7,6 @@ import edu.austral.dissis.chess.common.validators.*
 import edu.austral.dissis.chess.common.validators.move.DiagonalMove
 import edu.austral.dissis.chess.common.validators.move.MoveType
 import edu.austral.dissis.chess.common.validators.move.QuantityOfMoves
-import edu.austral.dissis.chess.chess.validators.obstacle.ObsDiagonalMove
 
 class ClassicEngineCheckers {
     fun basicEngine(): ValidationEngine {

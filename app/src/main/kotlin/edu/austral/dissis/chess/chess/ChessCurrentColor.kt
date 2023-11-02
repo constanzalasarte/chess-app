@@ -2,7 +2,6 @@ package edu.austral.dissis.chess.chess
 
 import edu.austral.dissis.chess.common.GameNextColor
 import edu.austral.dissis.chess.common.Piece
-import edu.austral.dissis.chess.common.PieceColor
 import edu.austral.dissis.chess.common.Square
 import edu.austral.dissis.chess.gui.PlayerColor
 

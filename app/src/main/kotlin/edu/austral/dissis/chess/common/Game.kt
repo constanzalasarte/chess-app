@@ -10,7 +10,6 @@ import edu.austral.dissis.chess.common.victoryValidators.*
 import edu.austral.dissis.chess.common.victoryValidators.result.ContinueResult
 import edu.austral.dissis.chess.common.victoryValidators.result.VictoryResult
 import edu.austral.dissis.chess.gui.InitialState
-import kotlin.math.abs
 
 class Game(
     var map: Map<Square, Piece>,
