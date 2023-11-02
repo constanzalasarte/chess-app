@@ -23,8 +23,8 @@ import javafx.stage.Stage
 
 
 fun main() {
-//    launch(ChessGameApplication::class.java)
-    launch(CheckersGameApplication::class.java)
+    launch(ChessGameApplication::class.java)
+//    launch(CheckersGameApplication::class.java)
 }
 
 class ChessGameApplication : Application() {

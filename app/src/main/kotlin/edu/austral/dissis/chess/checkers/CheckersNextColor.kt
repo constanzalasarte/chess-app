@@ -27,11 +27,16 @@ class CheckersNextColor: GameNextColor {
         return classicMovePiece(newMap, from, to)
     }
 
-    private fun getObstacleSquare(from: Square, to: Square): Square {
-        val diff = quantitySquaresBtw(from.vertical, to.vertical)
-        return Square(from.vertical + diff, from.horizontal + diff)
-
+    override fun invalidMove(pieces: Map<Square, Piece>, from: Square, to: Square): Map<Square, Piece> {
+        return pieces
     }
+
+    private fun getObstacleSquare(from: Square, to: Square): Square {
+        val vertical = quantitySquaresBtw(from.vertical, to.vertical)
+        val horizontal = quantitySquaresBtw(from.horizontal, to.horizontal)
+        return Square(from.vertical + vertical, from.horizontal + horizontal)
+    }
+
     private fun quantitySquaresBtw(from: Int, to: Int): Int {
         val difference = to - from
         return if(difference<0) difference + 1
@@ -92,7 +97,15 @@ class CheckersNextColor: GameNextColor {
         return PieceColor.BLACK
     }
     private fun getValidatorResult(from: Square, to: Square, pieces:Map<Square, Piece>): ValidatorResult {
-        return pieces[from]!!.validationMapper.move(from, to, pieces)
+        val vertical = quantitySquaresOut(from.vertical, to.vertical)
+        val horizontal = quantitySquaresOut(from.horizontal, to.horizontal)
+        val square = Square(from.vertical + vertical, from.horizontal + horizontal)
+        return pieces[from]!!.validationMapper.move(from, square, pieces)
+    }
+    private fun quantitySquaresOut(from: Int, to: Int): Int {
+        val difference = to - from
+        return if(difference<0) difference - 1
+        else difference + 1
     }
 
     private fun getInitialState(pieces: Map<Square, Piece>, currentPlayer: PieceColor): InitialState {

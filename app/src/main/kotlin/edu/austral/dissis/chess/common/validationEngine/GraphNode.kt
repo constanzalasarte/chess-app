@@ -26,7 +26,7 @@ class GraphNode(
         var result : ValidatorResult = InvalidResult()
         for (graph in graphNodes) {
             val validatorResult = graph.move(from, to, pieces)
-            if (validatorResult.isValid()) result = graph.move(from, to, pieces)
+            if (validatorResult.isValid()) result = validatorResult
         }
         return result
     }

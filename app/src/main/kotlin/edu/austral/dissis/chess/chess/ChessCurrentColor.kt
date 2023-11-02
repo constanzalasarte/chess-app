@@ -16,4 +16,8 @@ class ChessNextColor : GameNextColor {
         piece.incrementMove()
         return pieces.filter { (square, _) ->  square != from} + (to to piece)
     }
+
+    override fun invalidMove(pieces: Map<Square, Piece>, from: Square, to: Square): Map<Square, Piece> {
+        TODO("Not yet implemented")
+    }
 }
