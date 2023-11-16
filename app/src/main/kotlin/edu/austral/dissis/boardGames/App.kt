@@ -56,7 +56,7 @@ class ChessGameApplication : Application() {
     override fun start(primaryStage: Stage) {
         primaryStage.title = GameTitle
 
-        val root = GameView(adapter, imageResolver)
+        val root = createGameViewFrom(adapter, imageResolver)
         primaryStage.scene = Scene(root)
 
         primaryStage.show()
@@ -82,7 +82,7 @@ class CheckersGameApplication : Application() {
     override fun start(primaryStage: Stage) {
         primaryStage.title = GameTitle
 
-        val root = GameView(adapter, imageResolver)
+        val root = createGameViewFrom(adapter, imageResolver)
         primaryStage.scene = Scene(root)
 
         primaryStage.show()

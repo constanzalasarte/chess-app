@@ -10,8 +10,8 @@ import edu.austral.dissis.boardGames.common.victoryValidators.result.VictoryResu
 import edu.austral.dissis.chess.gui.InitialState
 
 class Game(
-    private var currentColor: PlayerColor,
-    private var adapter: Adapter
+    var currentColor: PlayerColor,
+    var adapter: Adapter
     ) : GameEngine {
 
     override fun init(): InitialState {

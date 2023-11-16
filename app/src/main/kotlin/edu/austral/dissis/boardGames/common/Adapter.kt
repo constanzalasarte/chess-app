@@ -19,7 +19,7 @@ class Adapter(
     fun getMaxCol(): Int = maxCol
     fun getMaxRow(): Int = maxRow
     fun getMap(): Map<Square, Piece> = map
-    fun movePiece(from: Square, to: Square): Adapter{
+    fun movePiece(from: Square, to: Square): Adapter {
         val newMap = nextColor.movePiece(map, from, to)
         return Adapter(nextColor, victoryValidators, maxCol, maxRow, newMap)
     }
