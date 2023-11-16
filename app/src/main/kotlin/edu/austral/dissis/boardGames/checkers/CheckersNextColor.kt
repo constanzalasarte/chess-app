@@ -5,18 +5,15 @@ import edu.austral.dissis.boardGames.common.*
 import edu.austral.dissis.boardGames.common.validators.result.ValidatorResult
 import edu.austral.dissis.boardGames.common.victoryValidators.result.ContinueResult
 import edu.austral.dissis.boardGames.common.victoryValidators.result.VictoryResult
-import edu.austral.dissis.chess.gui.PlayerColor
 import kotlin.math.abs
 
 data class InitialState(val squares: List<Square>, val opponentSquares: List<Square>)
 
 class CheckersNextColor: GameNextColor {
 
-    override fun getNextColor(pieces: Map<Square, Piece>, currentPlayer: PlayerColor): PlayerColor {
-        val pieceColor: PieceColor = if(currentPlayer == PlayerColor.WHITE) PieceColor.WHITE
-        else PieceColor.BLACK
+    override fun getNextColor(pieces: Map<Square, Piece>, pieceColor: PieceColor): PieceColor {
         val result = validate(pieces, pieceColor)
-        return if(result.isOver()) currentPlayer
+        return if(result.isOver()) pieceColor
         else opponentColor(pieceColor)
     }
 
@@ -53,9 +50,9 @@ class CheckersNextColor: GameNextColor {
         return pieces.filter { (square, _) ->  square != from} + (to to piece)
     }
 
-    private fun opponentColor(pieceColor: PieceColor): PlayerColor{
-        return if(pieceColor == PieceColor.WHITE) PlayerColor.BLACK
-        else PlayerColor.WHITE
+    private fun opponentColor(pieceColor: PieceColor): PieceColor{
+        return if(pieceColor == PieceColor.WHITE) PieceColor.BLACK
+        else PieceColor.WHITE
     }
 
     private fun validate(pieces: Map<Square, Piece>, currentPlayer: PieceColor): VictoryResult {

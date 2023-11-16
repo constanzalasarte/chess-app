@@ -1,5 +1,6 @@
 package edu.austral.dissis.boardGames.chess.createValidationEngine
 
+import com.sun.javafx.geom.Edge
 import edu.austral.dissis.boardGames.common.validators.CheckOriginSquare
 import edu.austral.dissis.boardGames.common.validationEngine.GraphNode
 import edu.austral.dissis.boardGames.common.validationEngine.ValidationEngine
@@ -83,7 +84,8 @@ class ClassicEngine(val maxRow: Int, val maxCol: Int): Engine {
     }
 
     private fun finalEngine(): ValidationEngine{
-        return GraphNode(NoCheckmateMove(), listOf())
+//        return GraphNode(NoCheckmateMove(), listOf())
+        return GraphNode(CheckOriginSquare(), listOf())
     }
 
     private fun getQuantityMoveGraph(quantity: Int, moveType: MoveType, list: List<ValidationEngine> = listOf(finalEngine())): ValidationEngine{

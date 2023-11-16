@@ -1,4 +1,4 @@
-package edu.austral.dissis.boardGames.chess.boarderReader
+package edu.austral.dissis.boardGames.common.boarderReader
 
 import edu.austral.dissis.boardGames.common.ChessPiece
 import edu.austral.dissis.boardGames.common.Piece

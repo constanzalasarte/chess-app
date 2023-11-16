@@ -15,8 +15,8 @@ class Piece(
         return "$chessPiece $color"
     }
 
-    fun move(to: Square, from: Square, pieces: Map<Square, Piece>): ValidatorResult {
-        return validationMapper.move(to, from, pieces)
+    fun move(from: Square, to: Square, pieces: Map<Square, Piece>): ValidatorResult {
+        return validationMapper.move(from, to, pieces)
     }
 
     fun getPieceId(): String {
