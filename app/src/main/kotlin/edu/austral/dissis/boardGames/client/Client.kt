@@ -50,7 +50,6 @@ class Client {
 
     fun sendMove(move: Move) {
         client.send(Message("move", move))
-        Thread.sleep(200)
     }
 
     fun handleMoveResult(moveResult: InvalidMove) {

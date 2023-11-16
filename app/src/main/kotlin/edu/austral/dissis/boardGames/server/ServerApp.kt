@@ -37,7 +37,8 @@ fun classicChess(): Game {
     val boarderReader = BoarderReader(enginePieces)
 //    private val checkmatePieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/chess/checkmate.txt", ClassicEngine(), chessPieces)
 //    private val noMoreOpponentPieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/chess/NoMoreOppPieces", ClassicEngine(), chessPieces)
-    val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/boardGames/chess/beginning")
+//    val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/boardGames/chess/beginning")
+    val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/boardGames/chess/castle.txt")
     return Game(PlayerColor.BLACK,
         Adapter(ChessNextColor(), listOf(CheckmateValidator(maxRow, maxCol), NoOppPiecesValidator()), maxCol, maxRow, pieces)
     )
