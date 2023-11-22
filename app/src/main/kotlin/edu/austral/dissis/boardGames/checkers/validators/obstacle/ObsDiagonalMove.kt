@@ -18,13 +18,19 @@ class ObsDiagonalMoveCheckers: ObstaclePiece(){
         while (abs(horizontal) > 0) {
             square = Square(from.vertical + vertical, from.horizontal + horizontal)
 
-            if(!isObstacle(square, pieces) && !isOpponentColor(square, pieces, from)) return InvalidResult()
+            if(checkSquare(square, pieces, from)) return InvalidResult()
 
             vertical = incrementCoordinate(vertical)
             horizontal = incrementCoordinate(horizontal)
         }
         return ValidResult()
     }
+
+    private fun checkSquare(
+        square: Square,
+        pieces: Map<Square, Piece>,
+        from: Square
+    ) = !isObstacle(square, pieces) && !isOpponentColor(square, pieces, from)
 
     private fun isOpponentColor(square: Square, pieces: Map<Square, Piece>, from: Square): Boolean {
         val pieceSquare = pieces.get(square)?.color ?: return false
