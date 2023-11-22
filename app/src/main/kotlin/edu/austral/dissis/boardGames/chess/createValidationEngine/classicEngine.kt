@@ -84,7 +84,7 @@ class ClassicEngine(val maxRow: Int, val maxCol: Int): Engine {
     }
 
     private fun finalEngine(): ValidationEngine{
-//        return GraphNode(NoCheckmateMove(), listOf())
+//        return GraphNode(NoCheckmateMove(maxRow, maxCol), listOf())
         return GraphNode(CheckOriginSquare(), listOf())
     }
 

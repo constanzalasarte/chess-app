@@ -12,7 +12,7 @@ import edu.austral.dissis.boardGames.chess.victoryValidators.CheckmateValidator
 class NoCheckmateMove(private val maxRow: Int, private val maxCol: Int) : MovementValidator {
     override fun validateMove(from: Square, to: Square, pieces: Map<Square, Piece>): ValidatorResult {
         val checkmateValidator = CheckmateValidator(maxRow, maxCol)
-        val result = checkmateValidator.validateVictory(applyMove(from, to, pieces), getOpponentColor(pieces.get(from)!!.color))
+        val result = checkmateValidator.validateVictory(applyMove(from, to, pieces), pieces.get(from)!!.color)
         if( result.isOver()) return InvalidResult()
         return ValidResult()
     }
