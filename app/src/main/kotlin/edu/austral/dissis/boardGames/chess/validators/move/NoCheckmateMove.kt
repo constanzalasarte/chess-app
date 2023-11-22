@@ -21,9 +21,4 @@ class NoCheckmateMove(private val maxRow: Int, private val maxCol: Int) : Moveme
         val piece : Piece = pieces[from] ?: return emptyMap()
         return pieces.filter { (square, _) ->  square != from} + (to to piece)
     }
-
-    private fun getOpponentColor(currentColor: PieceColor): PieceColor{
-        return if(currentColor == PieceColor.WHITE) PieceColor.BLACK
-        else PieceColor.WHITE
-    }
 }

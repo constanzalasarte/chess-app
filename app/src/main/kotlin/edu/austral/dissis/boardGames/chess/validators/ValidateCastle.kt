@@ -37,7 +37,7 @@ class ValidateCastle : MovementValidator {
         var minDistance = to.horizontal - squares[0].horizontal
         var minSquareDistance = squares[0]
         for(square in squares) {
-            if(abs(minDistance) > abs(to.horizontal - square.horizontal)){
+            if(checkMinDistance(minDistance, to, square)){
                 minDistance = to.horizontal - square.horizontal
                 minSquareDistance = square
             }
@@ -45,8 +45,17 @@ class ValidateCastle : MovementValidator {
         val toSquare = Square(to.vertical, horizontalToSquare(minDistance, minSquareDistance))
         return ValidWExecutionResult(pieceId = map[minSquareDistance]!!.id, fromSquare = minSquareDistance, toSquare = toSquare)
     }
+
+    private fun checkMinDistance(
+        minDistance: Int,
+        to: Square,
+        square: Square
+    ) = abs(minDistance) > abs(to.horizontal - square.horizontal)
+
     private fun horizontalToSquare(minDistance: Int, square: Square): Int {
-        if(minDistance > 0) return minDistance + 1
+        if(isPositive(minDistance)) return minDistance + 1
         return square.horizontal + minDistance - 1
     }
+
+    private fun isPositive(minDistance: Int) = minDistance > 0
 }

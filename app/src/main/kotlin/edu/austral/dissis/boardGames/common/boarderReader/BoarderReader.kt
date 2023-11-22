@@ -34,12 +34,14 @@ class BoarderReader(private val enginePieces: Map<ChessPiece, ValidationEngine>)
         val map: MutableMap<Square, Piece> = mutableMapOf<Square, Piece>()
         for ((indexList, list) in listString.withIndex()){
             for((indexString, string) in list.withIndex()){
-                if(string.length != 2) continue
+                if(checkSize(string)) continue
                 map[Square(indexList, indexString)] = createPiece(string, indexString, indexList)
             }
         }
         return map
     }
+
+    private fun checkSize(string: String) = string.length != 2
     private fun createPiece(string: String, indexString: Int, indexList: Int): Piece {
 
         val piece : List<ChessPiece> = enginePieces.keys.filter { string[0] == it.toString()[0] }

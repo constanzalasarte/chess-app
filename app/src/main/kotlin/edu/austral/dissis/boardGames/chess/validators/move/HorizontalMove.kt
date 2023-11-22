@@ -12,7 +12,9 @@ class HorizontalMove: MoveValidator() {
     override fun validateMove(from: Square, to: Square, pieces: Map<Square, Piece>): ValidatorResult {
         val vertical = quantitySquaresBtw(from.vertical, to.vertical)
         val horizontal = quantitySquaresBtw(from.horizontal, to.horizontal)
-        if(horizontal != 0 && vertical == 0) return ValidResult()
+        if(checkHorizontal(horizontal, vertical)) return ValidResult()
         return InvalidResult()
     }
+
+    private fun checkHorizontal(horizontal: Int, vertical: Int) = horizontal != 0 && vertical == 0
 }

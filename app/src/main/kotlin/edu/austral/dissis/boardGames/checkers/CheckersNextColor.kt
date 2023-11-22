@@ -36,7 +36,7 @@ class CheckersNextColor: GameNextColor {
 
     private fun quantitySquaresBtw(from: Int, to: Int): Int {
         val difference = to - from
-        return if(difference<0) difference + 1
+        return if(isNegative(difference)) difference + 1
         else difference - 1
     }
 
@@ -51,9 +51,11 @@ class CheckersNextColor: GameNextColor {
     }
 
     private fun opponentColor(pieceColor: PieceColor): PieceColor{
-        return if(pieceColor == PieceColor.WHITE) PieceColor.BLACK
+        return if(isWhite(pieceColor)) PieceColor.BLACK
         else PieceColor.WHITE
     }
+
+    private fun isWhite(pieceColor: PieceColor) = pieceColor == PieceColor.WHITE
 
     private fun validate(pieces: Map<Square, Piece>, currentPlayer: PieceColor): VictoryResult {
         val initialState = getInitialState(pieces, currentPlayer)
@@ -70,9 +72,14 @@ class CheckersNextColor: GameNextColor {
                 else oppIndex++
             }
         }
-        if(state.opponentSquares != initialState.opponentSquares) return NoMoreOpponentPieces()
+        if(checkOppSquares(state, initialState)) return NoMoreOpponentPieces()
         return ContinueResult()
     }
+
+    private fun checkOppSquares(
+        state: InitialState,
+        initialState: InitialState
+    ) = state.opponentSquares != initialState.opponentSquares
 
     private fun checkSizeOfOppSquares(
         state: InitialState,
@@ -89,10 +96,7 @@ class CheckersNextColor: GameNextColor {
             .filter{ it.value.color == color}
             .map { it.key }
     }
-    private fun getOpponentColor(currentPlayer: PieceColor): PieceColor {
-        if(currentPlayer == PieceColor.BLACK) return PieceColor.WHITE
-        return PieceColor.BLACK
-    }
+
     private fun getValidatorResult(from: Square, to: Square, pieces:Map<Square, Piece>): ValidatorResult {
         val vertical = quantitySquaresOut(from.vertical, to.vertical)
         val horizontal = quantitySquaresOut(from.horizontal, to.horizontal)
@@ -101,13 +105,15 @@ class CheckersNextColor: GameNextColor {
     }
     private fun quantitySquaresOut(from: Int, to: Int): Int {
         val difference = to - from
-        return if(difference<0) difference - 1
+        return if(isNegative(difference)) difference - 1
         else difference + 1
     }
 
+    private fun isNegative(difference: Int) = difference < 0
+
     private fun getInitialState(pieces: Map<Square, Piece>, currentPlayer: PieceColor): InitialState {
         val squares = getSquaresByColor(pieces, currentPlayer)
-        val opponentSquares = getSquaresByColor(pieces, getOpponentColor(currentPlayer))
+        val opponentSquares = getSquaresByColor(pieces, opponentColor(currentPlayer))
         return InitialState(squares, opponentSquares)
 
     }

@@ -20,7 +20,7 @@ class GraphNode(
             val result = if (graphNodes.isNotEmpty()) checkNodes(from, to, pieces, validatorResult)
             else validatorResult
             return if(!result.isValid()) result
-            else if(result !is ValidWExecutionResult && validatorResult is ValidWExecutionResult) validatorResult
+            else if(validWExecution(result, validatorResult)) validatorResult
             else result
         }
         return InvalidResult()

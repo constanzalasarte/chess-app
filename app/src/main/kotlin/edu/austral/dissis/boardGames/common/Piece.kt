@@ -20,9 +20,11 @@ class Piece(
     }
 
     fun getPieceId(): String {
-        if(chessPiece == ChessPiece.HORSE) return "knight"
+        if(checkHorsePiece()) return "knight"
         return chessPiece.toString().lowercase()
     }
+
+    private fun checkHorsePiece() = chessPiece == ChessPiece.HORSE
     fun incrementMove(){
         moves++
     }

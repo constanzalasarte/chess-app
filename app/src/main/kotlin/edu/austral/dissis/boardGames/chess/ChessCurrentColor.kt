@@ -8,9 +8,11 @@ import edu.austral.dissis.chess.gui.PlayerColor
 
 class ChessNextColor : GameNextColor {
     override fun getNextColor(pieces: Map<Square, Piece>, pieceColor: PieceColor): PieceColor {
-        return if(pieceColor == PieceColor.WHITE) PieceColor.BLACK
+        return if(colorIsWhite(pieceColor)) PieceColor.BLACK
         else PieceColor.WHITE
     }
+
+    private fun colorIsWhite(pieceColor: PieceColor) = pieceColor == PieceColor.WHITE
 
     override fun movePiece(pieces: Map<Square, Piece>, from: Square, to: Square): Map<Square, Piece> {
         val piece : Piece = pieces[from] ?: return emptyMap()

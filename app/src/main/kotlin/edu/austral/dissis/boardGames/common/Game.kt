@@ -81,9 +81,11 @@ class Game(
         return ChessPiece(piece.id, pieceToPlayerColor(piece.color), squareToPosition(square), piece.getPieceId())
     }
     private fun pieceToPlayerColor(color: PieceColor) : PlayerColor {
-        if(color== PieceColor.WHITE) return PlayerColor.WHITE
+        if(isWhite(color)) return PlayerColor.WHITE
         return PlayerColor.BLACK
     }
+
+    private fun isWhite(color: PieceColor) = color == PieceColor.WHITE
     private fun squareToPosition(square: Square) : Position {
         return Position(coordinateUIToSquare(square.vertical), square.horizontal+1)
     }
@@ -97,9 +99,11 @@ class Game(
 
 
     private fun getOpponentColor(): PlayerColor{
-        return if(currentColor == PlayerColor.WHITE) PlayerColor.BLACK
+        return if(checkWhite()) PlayerColor.BLACK
         else PlayerColor.WHITE
     }
+
+    private fun checkWhite() = currentColor == PlayerColor.WHITE
 
     private fun coordinateUIToSquare(coordinate: Int) : Int {
         return adapter.getMaxCol() - coordinate

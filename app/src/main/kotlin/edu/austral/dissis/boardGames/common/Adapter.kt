@@ -30,9 +30,11 @@ class Adapter(
     private fun checkMapSizes() = oldMap.size != map.size
 
     private fun pieceToPlayerColor(color: PieceColor) : PlayerColor {
-        if(color == PieceColor.WHITE) return PlayerColor.WHITE
+        if(isWhite(color)) return PlayerColor.WHITE
         return PlayerColor.BLACK
     }
+
+    private fun isWhite(color: PieceColor) = color == PieceColor.WHITE
     private fun playerToPieceColor(color: PlayerColor) : PieceColor {
         if(checkWhiteColor(color)) return PieceColor.WHITE
         return PieceColor.BLACK
@@ -60,12 +62,24 @@ class Adapter(
 
     fun checkPiece(from: Square, to: Square, currentColor: PlayerColor): MoveResult? {
         val piece = map.get(from)
-        if(from == to) return InvalidMove("Invalid move")
-        if(piece == null) return InvalidMove("No piece in (" + from.horizontal + ", " + from.vertical + ')')
-        else if (pieceToPlayerColor(piece.color) != currentColor)
+        if(equals(from, to)) return InvalidMove("Invalid move")
+        if(isNull(piece)) return InvalidMove("No piece in (" + from.horizontal + ", " + from.vertical + ')')
+        else if (checkColor(piece, currentColor))
             return InvalidMove("Piece does not belong to current player")
         return null
     }
+
+    private fun checkColor(
+        piece: Piece?,
+        currentColor: PlayerColor
+    ) = pieceToPlayerColor(piece!!.color) != currentColor
+
+    private fun isNull(piece: Piece?) = piece == null
+
+    private fun equals(
+        from: Square,
+        to: Square
+    ) = from == to
 
     fun checkMove(from: Square, to: Square): ValidatorResult {
         val piece = map[from]

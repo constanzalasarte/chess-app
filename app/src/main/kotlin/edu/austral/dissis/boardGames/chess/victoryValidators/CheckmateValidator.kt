@@ -19,18 +19,6 @@ data class InitialState(val kingSquare: Square, val opponentSquares: List<Square
 data class Move(val from: Square, val to: Square)
 
 class CheckmateValidator(val maxRow: Int, val maxCol: Int) : VictoryValidator {
-//    override fun validateVictory(pieces: Map<Square, Piece>, currentPlayer: PieceColor): VictoryResult {
-//        val initialState = getInitialState(pieces, currentPlayer)
-//        var state = getInitialState(pieces, currentPlayer)
-//
-//        for (square in state.squares){
-//            state = checkmate(state, square, pieces)
-//        }
-//        if(state.opponentSquares != initialState.opponentSquares) {
-//            return CheckmateResult()
-//        }
-//        return ContinueResult()
-//    }
 
     override fun validateVictory(pieces: Map<Square, Piece>, currentPlayer: PieceColor): VictoryResult {
         val allMoves = getAllPossiblesMoves(pieces, currentPlayer)
@@ -53,10 +41,16 @@ class CheckmateValidator(val maxRow: Int, val maxCol: Int) : VictoryValidator {
         for(oppSquare in state.opponentSquares){
             val typeResult = getValidatorResult(oppSquare, state.kingSquare, map)
             if (typeResult.isValid()) map = makeMove(Move(oppSquare, state.kingSquare), map)
-            if(map[state.kingSquare]!!.color != currentPlayer) return true
+            if (kingIsGone(map, state, currentPlayer)) return true
         }
         return false
     }
+
+    private fun kingIsGone(
+        map: Map<Square, Piece>,
+        state: InitialState,
+        currentPlayer: PieceColor
+    ) = map[state.kingSquare]!!.color != currentPlayer
 
 
     private fun makeMove(move: Move, pieces: Map<Square, Piece>): Map<Square, Piece> {
@@ -68,42 +62,18 @@ class CheckmateValidator(val maxRow: Int, val maxCol: Int) : VictoryValidator {
         return map.toMap()
     }
 
-//    private fun checkmate(
-//        state: InitialState,
-//        square: Square,
-//        pieces: Map<Square, Piece>
-//    ): InitialState {
-//        var state1 = state
-//        var typeResult1: ValidatorResult
-//        var oppIndex = 0
-//        while (checkSizeOfSquares(state1, oppIndex)) {
-//            typeResult1 = getValidatorResult(square, state1.squares[oppIndex], pieces)
-//            if (typeResult1.isValid())
-//                state1 = removeOppSquare(state1, oppIndex)
-//            else oppIndex++
-//        }
-//        return state1
-//    }
-
-//    private fun checkSizeOfSquares(
-//        state: InitialState,
-//        index: Int
-//    ) = state.squares.isNotEmpty() && index < state.squares.size
-
-//    private fun removeOppSquare(
-//        state: InitialState,
-//        oppIndex: Int
-//    ) = InitialState(state.squares, state.opponentSquares.filterIndexed { index, _ -> index != oppIndex })
-
     private fun getSquaresByColor(pieces: Map<Square, Piece>, color: PieceColor, condition: (Piece) -> Boolean): List<Square> {
         return pieces
             .filter{ it.value.color == color && condition(it.value)}
             .map { it.key }
     }
+
     private fun getOpponentColor(currentPlayer: PieceColor): PieceColor {
-        if(currentPlayer == PieceColor.BLACK) return PieceColor.WHITE
+        if(colorIsBlack(currentPlayer)) return PieceColor.WHITE
         return PieceColor.BLACK
     }
+
+    private fun colorIsBlack(currentPlayer: PieceColor) = currentPlayer == PieceColor.BLACK
     private fun getValidatorResult(from: Square, to: Square, pieces:Map<Square, Piece>): ValidatorResult {
         return pieces[from]!!.move(from, to, pieces)
     }

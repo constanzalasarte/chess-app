@@ -16,9 +16,11 @@ class ObsVerticalMove: ObstaclePiece() {
 
             if(isObstacle(square, pieces)) return InvalidResult()
 
-            if(vertical < 0) vertical++
+            if(lessThanZero(vertical)) vertical++
             else vertical--
         }
         return ValidResult()
     }
+
+    private fun lessThanZero(vertical: Int) = vertical < 0
 }

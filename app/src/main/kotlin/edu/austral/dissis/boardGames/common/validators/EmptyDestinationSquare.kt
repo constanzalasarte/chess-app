@@ -8,7 +8,12 @@ import edu.austral.dissis.boardGames.common.validators.result.ValidatorResult
 
 class EmptyDestinationSquare : MovementValidator {
     override fun validateMove(from: Square, to: Square, pieces: Map<Square, Piece>): ValidatorResult {
-        if(pieces[to]== null) return ValidResult()
+        if(squareEmpty(pieces, to)) return ValidResult()
         return InvalidResult()
     }
+
+    private fun squareEmpty(
+        pieces: Map<Square, Piece>,
+        to: Square
+    ) = pieces[to] == null
 }

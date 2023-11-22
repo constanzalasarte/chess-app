@@ -8,8 +8,10 @@ abstract class MoveValidator: MovementValidator {
         return to - from
     }
     fun checkIncrementByColor(vertical: Int, pieceColor: PieceColor): Boolean{
-        if(pieceColor == PieceColor.BLACK) return vertical>0
+        if(colorBlack(pieceColor)) return vertical>0
         return vertical<0
     }
+
+    private fun colorBlack(pieceColor: PieceColor) = pieceColor == PieceColor.BLACK
 
 }

@@ -18,9 +18,11 @@ class ObsHorizontalMove: ObstaclePiece(){
 
             if(isObstacle(square, pieces)) return InvalidResult()
 
-            if(horizontal < 0) horizontal++
+            if(isNegative(horizontal)) horizontal++
             else horizontal--
         }
         return ValidResult()
     }
+
+    private fun isNegative(horizontal: Int) = horizontal < 0
 }

@@ -8,7 +8,13 @@ import edu.austral.dissis.boardGames.common.validators.result.ValidatorResult
 
 class CheckDestinationSquare : MovementValidator {
     override fun validateMove(from: Square, to: Square, pieces: Map<Square, Piece>): ValidatorResult {
-        if(pieces[from]?.color != pieces[to]?.color) return ValidResult()
+        if(colorIsDiff(pieces, from, to)) return ValidResult()
         return InvalidResult()
     }
+
+    private fun colorIsDiff(
+        pieces: Map<Square, Piece>,
+        from: Square,
+        to: Square
+    ) = pieces[from]?.color != pieces[to]?.color
 }

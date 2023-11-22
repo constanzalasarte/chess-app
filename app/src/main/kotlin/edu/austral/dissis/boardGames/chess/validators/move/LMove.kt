@@ -13,9 +13,11 @@ class LMove: MoveValidator() {
         val vertical = quantitySquaresBtw(from.vertical, to.vertical)
         val horizontal = quantitySquaresBtw(from.horizontal, to.horizontal)
         var result = false
-        if(abs(vertical) == 2) result = (abs(horizontal) == 1)
-        else if(abs(horizontal) == 2) result = abs(vertical) == 1
+        if(equalsToTwo(vertical)) result = (abs(horizontal) == 1)
+        else if(equalsToTwo(horizontal)) result = abs(vertical) == 1
         if(result && checkIncrementByColor(vertical, pieces.get(from)!!.color)) return ValidResult()
         return InvalidResult()
     }
+
+    private fun equalsToTwo(vertical: Int) = abs(vertical) == 2
 }
