@@ -19,18 +19,27 @@ class GraphNode(
         if (validatorResult.isValid()) {
             val result = if (graphNodes.isNotEmpty()) checkNodes(from, to, pieces, validatorResult)
             else validatorResult
-            return if(result.isValid() && result !is ValidWExecutionResult) validatorResult
+            return if(!result.isValid()) result
+            else if(result !is ValidWExecutionResult && validatorResult is ValidWExecutionResult) validatorResult
             else result
         }
         return InvalidResult()
     }
 
     private fun checkNodes(from: Square, to: Square, pieces: Map<Square, Piece>, validatorResult: ValidatorResult): ValidatorResult {
-        var result : ValidatorResult = validatorResult
+        var result : ValidatorResult = InvalidResult()
         for (graph in graphNodes) {
             val valResult = graph.move(from, to, pieces)
-            if (valResult.isValid() && result !is ValidWExecutionResult) result = valResult
+            if(checkValid(result, valResult)) result = valResult
         }
         return result
+    }
+
+    private fun checkValid(result: ValidatorResult, valResult: ValidatorResult): Boolean {
+        return valResult.isValid() && result !is ValidWExecutionResult
+    }
+
+    private fun validWExecution(result: ValidatorResult, valResult: ValidatorResult): Boolean {
+        return result !is ValidWExecutionResult && valResult is ValidWExecutionResult
     }
 }

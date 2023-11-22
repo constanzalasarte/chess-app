@@ -41,7 +41,7 @@ class Game(
                 is ValidWExecutionResult -> {
                     applyMove(Move(squareToPosition(result.fromSquare), squareToPosition(result.toSquare)))
                     adapter = adapter.movePiece(fromSquare, toSquare)
-                    changeCurrentColor()
+                    currentColor = adapter.getNextColor(currentColor)
                 }
             }
 
@@ -55,12 +55,9 @@ class Game(
     private fun statusGame(): MoveResult{
         val chessPieces = getChessPieces()
 
-        val victoryResult = getVictoryResult()
-        if(victoryResult.isOver())
-            return (GameOver(currentColor))
-//        if(getLostResult().isOver()){
-//            return (GameOver(getOpponentColor()))
-//        }
+        if(getLostResult().isOver()){
+            return GameOver(currentColor)
+        }
         currentColor = adapter.getNextColor(currentColor)
         return NewGameState(chessPieces, currentColor)
     }
@@ -79,9 +76,6 @@ class Game(
             pieces.add(getChessPiece(piece, square))
         }
         return pieces
-    }
-    private fun changeCurrentColor() {
-        currentColor = getOpponentColor()
     }
     private fun getChessPiece(piece: Piece, square: Square): ChessPiece{
         return ChessPiece(piece.id, pieceToPlayerColor(piece.color), squareToPosition(square), piece.getPieceId())

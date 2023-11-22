@@ -16,7 +16,8 @@ import edu.austral.dissis.boardGames.common.validators.EdgeSquare
 import edu.austral.dissis.chess.gui.PlayerColor
 
 fun main(){
-    val setUp = classicChess()
+//    val setUp = classicChess()
+    val setUp = classicCheckers()
     Server(setUp)
 }
 
@@ -36,9 +37,9 @@ fun classicChess(): Game {
     )
     val boarderReader = BoarderReader(enginePieces)
 //    private val checkmatePieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/chess/checkmate.txt", ClassicEngine(), chessPieces)
-//    private val noMoreOpponentPieces = boarderReader.boarderReader("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/chess/chess/NoMoreOppPieces", ClassicEngine(), chessPieces)
+    val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/boardGames/chess/NoMoreOppPieces")
 //    val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/boardGames/chess/beginning")
-    val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/boardGames/chess/castle.txt")
+//    val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/boardGames/chess/castle.txt")
     return Game(PlayerColor.BLACK,
         Adapter(ChessNextColor(), listOf(CheckmateValidator(maxRow, maxCol), NoOppPiecesValidator()), maxCol, maxRow, pieces)
     )
@@ -52,6 +53,7 @@ fun classicCheckers(): Game{
         ChessPiece.PAWN to classicEngine.basicEngine(),
     )
     val boarderReader = BoarderReader(enginePieces)
-    val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/boardGames/checkers/beginning")
-    return Game(PlayerColor.BLACK, Adapter(CheckersNextColor(), listOf(NoOppPiecesValidator()), maxCol, maxRow, pieces))
+//    val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/boardGames/checkers/beginning")
+    val pieces = boarderReader.getMap("/home/constanza/projects/facu/system_design/chess-app/app/src/main/kotlin/edu/austral/dissis/boardGames/checkers/eat2Pieces")
+    return Game(PlayerColor.WHITE, Adapter(CheckersNextColor(), listOf(NoOppPiecesValidator()), maxCol, maxRow, pieces))
 }
