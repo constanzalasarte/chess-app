@@ -1,18 +1,7 @@
 package clientserver.netty
 
 import com.fasterxml.jackson.core.type.TypeReference
-import edu.austral.dissis.boardGames.checkers.victoryValidators.NoOppPiecesValidator
-import edu.austral.dissis.boardGames.chess.ChessNextColor
-import edu.austral.dissis.boardGames.chess.createValidationEngine.ClassicEngine
-import edu.austral.dissis.boardGames.chess.victoryValidators.CheckmateValidator
-import edu.austral.dissis.boardGames.common.Adapter
-import edu.austral.dissis.boardGames.common.ChessPiece
-import edu.austral.dissis.boardGames.common.Game
-import edu.austral.dissis.boardGames.common.boarderReader.BoarderReader
-import edu.austral.dissis.boardGames.common.validationEngine.GraphNode
-import edu.austral.dissis.boardGames.common.validationEngine.ValidationEngine
-import edu.austral.dissis.boardGames.common.validators.EdgeSquare
-import edu.austral.dissis.chess.gui.PlayerColor
+import edu.austral.dissis.boardGames.Adapter
 import edu.austral.ingsis.clientserver.*
 import edu.austral.ingsis.clientserver.netty.client.NettyClientBuilder
 import edu.austral.ingsis.clientserver.netty.server.NettyServerBuilder
@@ -48,8 +37,8 @@ class NettyServerTransmissionTest {
     private val client2RawCollector = MessageCollectorListener<String>()
 
 
-    private var typeReferenceChess: TypeReference<Message<Game>> =
-        object : TypeReference<Message<Game>>() {}
+    private var typeReferenceChess: TypeReference<Message<Adapter>> =
+        object : TypeReference<Message<Adapter>>() {}
 
     private var reference: TypeReference<Message<String>> =
         object : TypeReference<Message<String>>() {}

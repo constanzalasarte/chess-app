@@ -1,5 +1,5 @@
 package edu.austral.dissis.boardGames.common
 
-enum class ChessPiece {
+enum class MyPiece {
     PAWN, HORSE, BISHOP, ROOK, QUEEN, KING, ARCHBISHOP, CHANCELLOR
 }

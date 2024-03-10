@@ -1,6 +1,6 @@
 package edu.austral.dissis.boardGames.common.boarderReader
 
-import edu.austral.dissis.boardGames.common.ChessPiece
+import edu.austral.dissis.boardGames.common.MyPiece
 import edu.austral.dissis.boardGames.common.Piece
 import edu.austral.dissis.boardGames.common.PieceColor
 import edu.austral.dissis.boardGames.common.Square
@@ -8,7 +8,7 @@ import edu.austral.dissis.boardGames.common.validationEngine.ValidationEngine
 import java.io.File
 import java.lang.Exception
 
-class BoarderReader(private val enginePieces: Map<ChessPiece, ValidationEngine>){
+class BoarderReader(private val enginePieces: Map<MyPiece, ValidationEngine>){
     fun getMap(fileName: String) : MutableMap<Square, Piece>{
         val inputString : String = readFile(fileName)
 
@@ -44,7 +44,7 @@ class BoarderReader(private val enginePieces: Map<ChessPiece, ValidationEngine>)
     private fun checkSize(string: String) = string.length != 2
     private fun createPiece(string: String, indexString: Int, indexList: Int): Piece {
 
-        val piece : List<ChessPiece> = enginePieces.keys.filter { string[0] == it.toString()[0] }
+        val piece : List<MyPiece> = enginePieces.keys.filter { string[0] == it.toString()[0] }
         if (piece.isEmpty()) throw Exception("INCORRECT CHESS PIECE")
         val chessPiece = piece[0]
 

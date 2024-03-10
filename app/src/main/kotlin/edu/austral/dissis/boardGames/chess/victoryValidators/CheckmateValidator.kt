@@ -1,6 +1,6 @@
 package edu.austral.dissis.boardGames.chess.victoryValidators
 
-import edu.austral.dissis.boardGames.common.ChessPiece
+import edu.austral.dissis.boardGames.common.MyPiece
 import edu.austral.dissis.boardGames.common.Piece
 import edu.austral.dissis.boardGames.common.PieceColor
 import edu.austral.dissis.boardGames.common.Square
@@ -79,7 +79,7 @@ class CheckmateValidator(val maxRow: Int, val maxCol: Int) : VictoryValidator {
     }
     
     private fun getInitialState(pieces: Map<Square, Piece>, currentPlayer: PieceColor): InitialState? {
-        val squares = getSquaresByColor(pieces, currentPlayer){ piece -> piece.chessPiece == ChessPiece.KING }
+        val squares = getSquaresByColor(pieces, currentPlayer){ piece -> piece.chessPiece == MyPiece.KING }
         val opponentSquares = getSquaresByColor(pieces, getOpponentColor(currentPlayer)) { _ -> true }
         if(squares.isNotEmpty())
             return InitialState(squares[0], opponentSquares)

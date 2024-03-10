@@ -1,17 +1,20 @@
-package edu.austral.dissis.boardGames.common
+package edu.austral.dissis.boardGames
 
 import edu.austral.dissis.chess.gui.*
 import edu.austral.dissis.chess.gui.ChessPiece
 import edu.austral.dissis.boardGames.common.validators.result.InvalidResult
 import edu.austral.dissis.boardGames.common.validators.result.ValidResult
 import edu.austral.dissis.boardGames.chess.validators.result.ValidWExecutionResult
+import edu.austral.dissis.boardGames.common.Piece
+import edu.austral.dissis.boardGames.common.PieceColor
+import edu.austral.dissis.boardGames.common.Square
 import edu.austral.dissis.boardGames.common.validators.result.ValidatorResult
 import edu.austral.dissis.boardGames.common.victoryValidators.result.VictoryResult
 import edu.austral.dissis.chess.gui.InitialState
 
-class Game(
+class Adapter(
     var currentColor: PlayerColor,
-    var adapter: Adapter
+    var adapter: Game
     ) : GameEngine {
 
     override fun init(): InitialState {
@@ -29,10 +32,8 @@ class Game(
         if(checkCurrentPieces()){
             val fromSquare = positionToSquare(move.component1())
             val toSquare = positionToSquare(move.component2())
-
             val checkPiece = adapter.checkPiece(fromSquare, toSquare, currentColor)
             if (checkPiece != null) return checkPiece
-
             when (val result: ValidatorResult = adapter.checkMove(fromSquare, toSquare)) {
                 is InvalidResult -> return InvalidMove("Invalid move")
                 is ValidResult -> {
@@ -44,7 +45,6 @@ class Game(
                     currentColor = adapter.getNextColor(currentColor)
                 }
             }
-
             return statusGame()
         }
         return InvalidMove("GAME OVER. TIE!")

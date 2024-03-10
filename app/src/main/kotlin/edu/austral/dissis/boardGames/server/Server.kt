@@ -1,7 +1,7 @@
 package edu.austral.dissis.boardGames.server
 
 import com.fasterxml.jackson.core.type.TypeReference
-import edu.austral.dissis.boardGames.common.Game
+import edu.austral.dissis.boardGames.Adapter
 import edu.austral.dissis.chess.gui.*
 import edu.austral.ingsis.clientserver.Message
 import edu.austral.ingsis.clientserver.Server
@@ -9,7 +9,7 @@ import edu.austral.ingsis.clientserver.ServerBuilder
 import edu.austral.ingsis.clientserver.netty.server.NettyServerBuilder
 
 class Server(
-    val game: Game,
+    val game: Adapter,
     val serverBuilder: ServerBuilder = NettyServerBuilder.createDefault()) {
     private var server : Server
     init {

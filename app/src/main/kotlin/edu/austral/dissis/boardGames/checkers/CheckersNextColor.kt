@@ -62,11 +62,10 @@ class CheckersNextColor: GameNextColor {
         var state = getInitialState(pieces, currentPlayer)
 
         var oppIndex : Int
-        var typeResult : ValidatorResult
         for (square in state.squares){
             oppIndex = 0
             while (checkSizeOfOppSquares(state, oppIndex)){
-                typeResult = getValidatorResult(square, state.opponentSquares[oppIndex], pieces)
+                val typeResult = getValidatorResult(square, state.opponentSquares[oppIndex], pieces)
                 if(typeResult.isValid())
                     state = changeState(state, oppIndex)
                 else oppIndex++

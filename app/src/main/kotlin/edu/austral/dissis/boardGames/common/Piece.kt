@@ -7,7 +7,7 @@ class Piece(
 //    var active: Boolean,
     var id: String,
     var color: PieceColor,
-    var chessPiece: ChessPiece,
+    var chessPiece: MyPiece,
     var moves: Int,
     var validationMapper: ValidationEngine
 ){
@@ -24,7 +24,7 @@ class Piece(
         return chessPiece.toString().lowercase()
     }
 
-    private fun checkHorsePiece() = chessPiece == ChessPiece.HORSE
+    private fun checkHorsePiece() = chessPiece == MyPiece.HORSE
     fun incrementMove(){
         moves++
     }

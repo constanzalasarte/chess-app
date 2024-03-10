@@ -1,6 +1,6 @@
 package edu.austral.dissis.boardGames.chess.validators
 
-import edu.austral.dissis.boardGames.common.ChessPiece
+import edu.austral.dissis.boardGames.common.MyPiece
 import edu.austral.dissis.boardGames.common.Piece
 import edu.austral.dissis.boardGames.common.Square
 import edu.austral.dissis.boardGames.common.validators.result.InvalidResult
@@ -27,8 +27,8 @@ class ValidateCastle : MovementValidator {
     private fun checkPieceRookColorAndMoves(piece: Piece, other: Piece): Boolean{
         return checkPieceRook(piece.chessPiece) && checkPieceColor(piece, other) && piece.moves == 0
     }
-    private fun checkPieceRook(chessPiece: ChessPiece): Boolean{
-        return chessPiece == ChessPiece.ROOK
+    private fun checkPieceRook(chessPiece: MyPiece): Boolean{
+        return chessPiece == MyPiece.ROOK
     }
     private fun checkPieceColor(piece: Piece, other: Piece?): Boolean{
         return piece.color == other?.color

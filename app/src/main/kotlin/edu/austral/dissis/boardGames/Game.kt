@@ -1,5 +1,9 @@
-package edu.austral.dissis.boardGames.common
+package edu.austral.dissis.boardGames
 
+import edu.austral.dissis.boardGames.common.GameNextColor
+import edu.austral.dissis.boardGames.common.Piece
+import edu.austral.dissis.boardGames.common.PieceColor
+import edu.austral.dissis.boardGames.common.Square
 import edu.austral.dissis.boardGames.common.validators.result.ValidatorResult
 import edu.austral.dissis.boardGames.common.victoryValidators.VictoryValidator
 import edu.austral.dissis.boardGames.common.victoryValidators.result.ContinueResult
@@ -8,7 +12,7 @@ import edu.austral.dissis.chess.gui.InvalidMove
 import edu.austral.dissis.chess.gui.MoveResult
 import edu.austral.dissis.chess.gui.PlayerColor
 
-class Adapter(
+class Game(
     private val nextColor: GameNextColor,
     private val victoryValidators: List<VictoryValidator>,
     private val maxCol: Int,
@@ -18,9 +22,9 @@ class Adapter(
     fun getMaxCol(): Int = maxCol
     fun getMaxRow(): Int = maxRow
     fun getMap(): Map<Square, Piece> = map
-    fun movePiece(from: Square, to: Square): Adapter {
+    fun movePiece(from: Square, to: Square): Game {
         val newMap = nextColor.movePiece(map, from, to)
-        return Adapter(nextColor, victoryValidators, maxCol, maxRow, newMap, map)
+        return Game(nextColor, victoryValidators, maxCol, maxRow, newMap, map)
     }
     fun getNextColor(currentPlayer: PlayerColor): PlayerColor{
         return if(checkMapSizes()) pieceToPlayerColor(nextColor.getNextColor(map, playerToPieceColor(currentPlayer)))
